@@ -1,0 +1,55 @@
+/* ---------- shared base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: clip; }
+body {
+  direction: rtl;
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+a { color: inherit; text-decoration: none; }
+::selection { background: currentColor; color: var(--bg); }
+
+/* hide scrollbar for marquee tracks */
+.mq-track::-webkit-scrollbar { display: none; }
+.mq-track { scrollbar-width: none; }
+
+/* scroll-reveal: hide until .in is added */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2,.6,.2,1), transform .9s cubic-bezier(.2,.6,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.delay-1 { transition-delay: .08s; }
+.reveal.delay-2 { transition-delay: .16s; }
+.reveal.delay-3 { transition-delay: .24s; }
+.reveal.delay-4 { transition-delay: .32s; }
+.reveal.delay-5 { transition-delay: .40s; }
+
+/* placeholder image element — striped warm tan with mono caption */
+.ph {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ph-bg);
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--ph-stripe-a) 0 14px,
+    var(--ph-stripe-b) 14px 28px
+  );
+  isolation: isolate;
+}
+.ph::after {
+  content: attr(data-cap);
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 14px 18px;
+  font: 500 12px/1.3 "Heebo", -apple-system, system-ui, sans-serif;
+  letter-spacing: .04em;
+  color: var(--ph-cap);
+  background: linear-gradient(to top, var(--ph-cap-bg) 60%, transparent);
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL number runs need ltr to keep digits ordered correctly */
+.num { direction: ltr; unicode-bidi: isolate; display: inline-block; }

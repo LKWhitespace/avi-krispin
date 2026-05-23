@@ -1,0 +1,1473 @@
+<!doctype html>
+<html lang="he" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>אבי קריספין · נגרות בהתאמה אישית ושדרוג ריהוט · צפון הארץ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;800;900&family=Heebo:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+html {
+  direction: ltr;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(199,154,107,.45) transparent;
+  scrollbar-gutter: stable;
+}
+html::-webkit-scrollbar { width: 6px; height: 6px; }
+html::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-thumb {
+  background: rgba(199,154,107,.35);
+  border-radius: 99px;
+}
+html::-webkit-scrollbar-thumb:hover { background: rgba(199,154,107,.6); }
+body { direction: ltr; }
+body > * { direction: rtl; }
+:root {
+  --bg: #161310;
+  --bg-2: #1d1814;
+  --bg-3: #221c17;
+  --fg: #ece1cf;
+  --fg-2: #c9bda9;
+  --fg-mute: #8a7f70;
+  --fg-faint: #5a5247;
+  --accent: #c79a6b;
+  --accent-soft: rgba(199,154,107,.18);
+  --line: rgba(236,225,207,.10);
+  --line-2: rgba(236,225,207,.22);
+  --ph-bg: #2a221c;
+  --ph-stripe-a: #2e251e;
+  --ph-stripe-b: #38291f;
+  --ph-cap: #b8a48a;
+  --ph-cap-bg: rgba(22,19,16,.85);
+
+  --serif: "Frank Ruhl Libre", "Times New Roman", serif;
+  --sans:  "Heebo", -apple-system, system-ui, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, monospace;
+
+  --gutter: 56px;
+  --page-max: 1320px;
+}
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.wrap { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* Small caps-style Hebrew label */
+.kicker {
+  font: 500 12px/1 var(--sans);
+  letter-spacing: .12em;
+  color: var(--accent);
+  direction: rtl;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+.about-label .num {
+  direction: rtl;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+.eyebrow-row {
+  display: flex; align-items: center; gap: 14px;
+  color: var(--fg-mute);
+  flex-wrap: wrap;
+}
+.eyebrow-row .dash { width: 36px; height: 1px; background: var(--line-2); flex: 0 0 auto; }
+
+/* ============ HEADER ============ */
+.header {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  padding: 22px var(--gutter);
+  transition: padding .35s ease, background .35s ease, backdrop-filter .35s ease, border-color .35s ease;
+  border-bottom: 1px solid transparent;
+}
+.header.shrunk {
+  padding: 12px var(--gutter);
+  background: rgba(22,19,16,.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom-color: var(--line);
+}
+.header-inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  white-space: nowrap;
+}
+.brand .logo {
+  display: block;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+}
+.brand .mark {
+  font: 400 22px/1 var(--serif);
+  letter-spacing: -.01em;
+  color: #ece1cf;
+}
+.brand .est {
+  font: 500 11px/1 var(--sans);
+  color: var(--fg-mute);
+  letter-spacing: .14em;
+}
+.nav { display: flex; gap: 28px; justify-content: center; }
+.nav a {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ece1cf;
+  position: relative;
+  padding: 4px 0;
+  transition: color .2s;
+}
+.nav a:hover { color: #ece1cf; }
+.nav a::after {
+  content: ""; position: absolute; inset: auto 0 -2px 0;
+  height: 1px; background: var(--accent);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .3s cubic-bezier(.2,.7,.3,1);
+}
+.nav a:hover::after { transform: scaleX(1); }
+
+.header-cta {
+  display: flex; align-items: center; gap: 12px;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px; font-weight: 500;
+  transition: background .2s, color .2s, border-color .2s, transform .2s;
+  white-space: nowrap;
+}
+.btn-ghost { color: #ece1cf; border: 1px solid rgba(236,225,207,.35); }
+.btn-ghost:hover { color: #ece1cf; border-color: #ece1cf; }
+.btn-primary { background: #ece1cf; color: var(--bg); }
+.btn-primary:hover { background: #fff5e0; color: var(--bg); }
+.btn svg { width: 14px; height: 14px; flex: 0 0 14px; }
+
+/* ============ HERO ============ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 140px var(--gutter) 80px;
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-text { position: relative; z-index: 2; }
+.hero-meta {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 40px;
+  color: var(--fg-mute);
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+.hero-meta .tag {
+  padding: 5px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  color: var(--fg-2);
+  font: 500 11px/1 var(--sans); letter-spacing: .12em;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(48px, 5.4vw, 84px);
+  line-height: .96;
+  letter-spacing: -.02em;
+  margin: 0 0 28px;
+  text-wrap: balance;
+}
+.hero h1 .line { white-space: nowrap; display: inline-block; }
+.hero h1 .light,
+.hero h1 em { font-weight: 400; }
+.hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  display: inline-block;
+}
+.hero h1 .light { font-weight: 400; color: var(--fg); }
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--fg-2);
+  max-width: 480px;
+  margin-bottom: 44px;
+}
+.hero-cta {
+  display: flex; gap: 12px; align-items: center;
+  flex-wrap: wrap;
+}
+.cta-primary {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 18px 28px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #1a1107;
+  font-weight: 600;
+  font-size: 15px;
+  transition: transform .25s, box-shadow .25s, background .25s;
+}
+.cta-primary:hover { background: #d8ac7e; transform: translateY(-2px); box-shadow: 0 18px 40px -16px rgba(199,154,107,.5); }
+.cta-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 18px 22px;
+  color: var(--fg);
+  font-weight: 500;
+  font-size: 15px;
+  border-bottom: 1px solid var(--line-2);
+  border-radius: 0;
+  transition: border-color .2s;
+}
+.cta-secondary:hover { border-bottom-color: var(--accent); }
+.cta-secondary .num { direction: ltr; unicode-bidi: isolate; }
+
+.hero-art {
+  position: relative;
+  align-self: center;
+  display: grid; place-items: center;
+}
+.portrait {
+  width: 100%;
+  aspect-ratio: 5 / 5;
+  position: relative;
+  background: #1d1612;
+  overflow: hidden;
+}
+.portrait img {
+  position: absolute; left: 0; right: 0;
+  top: -8%; height: 116%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  filter: saturate(.88) contrast(1.02);
+  will-change: transform;
+}
+.portrait::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(22,19,16,0) 55%, rgba(22,19,16,.45) 100%),
+    radial-gradient(120% 80% at 50% 30%, rgba(199,154,107,.05), transparent 60%);
+  pointer-events: none;
+}
+.portrait-frame {
+  position: absolute; inset: 18px -18px -18px 18px;
+  border: 1px solid var(--line-2);
+  z-index: -1;
+}
+.hero-foot {
+  position: absolute;
+  inset: auto 0 28px 0;
+  display: flex; align-items: end; justify-content: space-between;
+  gap: 24px;
+  pointer-events: none;
+}
+.hero-foot .scroll-cue {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: 500 11px/1 var(--sans);
+  letter-spacing: .18em;
+  color: var(--fg-mute);
+}
+.hero-foot .scroll-cue .line {
+  display: inline-block;
+  width: 48px; height: 1px;
+  background: var(--accent);
+  animation: pulseLine 2.2s ease-in-out infinite;
+}
+@keyframes pulseLine {
+  0%,100% { transform: scaleX(.4); opacity: .4; }
+  50%     { transform: scaleX(1);  opacity: 1; }
+}
+.hero-foot .qmark {
+  font: 500 11px/1.6 var(--sans);
+  letter-spacing: .08em;
+  color: var(--fg-mute);
+  text-align: left;
+}
+.hero-foot .qmark b { color: var(--fg); font-weight: 600; }
+
+/* ============ MARQUEE TICKER ============ */
+.ticker {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 22px 20px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.ticker .mq-track {
+  display: inline-flex; gap: 56px; align-items: center;
+  animation: tick 38s linear infinite;
+  white-space: nowrap;
+}
+.ticker:hover .mq-track { animation-play-state: paused; }
+.ticker span {
+  font: 500 16px/1 var(--sans);
+  letter-spacing: .04em;
+  color: var(--fg-2);
+}
+.ticker span.em {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--fg-2);
+}
+.ticker .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex: 0 0 4px; }
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(50%); } }
+
+/* ============ ABOUT ============ */
+.about { padding: 140px var(--gutter) 120px; }
+.about-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 80px;
+}
+.about-label .num {
+  font: 500 12px/1 var(--sans);
+  letter-spacing: .12em; color: var(--accent);
+}
+.about-label .ttl {
+  margin-top: 14px;
+  font: 500 14px/1.7 var(--sans);
+  color: var(--fg-mute);
+}
+.about-body h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(36px, 4.4vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  margin: 0 0 36px;
+  text-wrap: balance;
+  max-width: 18ch;
+}
+.about-body h2 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.about-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 24px;
+}
+.about-cols p {
+  color: var(--fg-2);
+  font-size: 16px;
+  line-height: 1.75;
+}
+.about-cols p + p { margin-top: 18px; }
+.signature {
+  margin-top: 40px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--fg);
+}
+.signature .meta {
+  display: block;
+  margin-top: 6px;
+  font: 500 12px/1.4 var(--sans);
+  letter-spacing: .1em; color: var(--fg-mute);
+  font-style: normal;
+}
+
+/* ============ SERVICES — sticky title + scrolling rows (concept B, dark) ============ */
+.services {
+  padding: 130px 0 160px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+}
+.services-wrap {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.services-sticky {
+  position: sticky;
+  top: 120px;
+}
+.services-sticky .num {
+  font: 500 12px/1 var(--sans);
+  letter-spacing: .12em;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+.services-sticky h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(36px, 4.4vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  margin-bottom: 24px;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.services-sticky h2 .serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -.015em;
+}
+.services-sticky p,
+.service-row p { color: var(--fg-2); font-size: 15.5px; line-height: 1.65; max-width: 40ch; letter-spacing: 0; font-weight: 400; }
+
+.service-list { display: grid; gap: 0; }
+.service-row {
+  padding: 50px 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.service-row h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(18px, 2.6vw, 24px);
+  line-height: 1.15;
+  letter-spacing: -.015em;
+  margin-bottom: 10px;
+  color: var(--fg);
+}
+.service-row .he-sub {
+  color: var(--fg-mute);
+  font: 500 12px/1.4 var(--sans);
+  letter-spacing: .12em;
+  direction: rtl;
+  margin-bottom: 18px;
+}
+.service-row .art {
+  aspect-ratio: 5 / 4;
+  --ph-bg: #2a1f16;
+  --ph-stripe-a: #2e2218;
+  --ph-stripe-b: #38291d;
+  overflow: hidden;
+}
+.service-row .art .ph { width: 100%; height: 100%; }
+.service-row .art .ph::after { content: none; }
+.service-row .art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.service-row .art { position: relative; transition: transform .4s ease; }
+.service-row .art:has(img)::after {
+  content: "";
+  position: absolute;
+  inset: 55% 0 0 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.65) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.service-row .art .caption {
+  position: absolute;
+  inset: auto 16px 14px 16px;
+  font: 500 12px/1.4 var(--sans);
+  letter-spacing: .08em;
+  color: var(--fg);
+  text-shadow: 0 1px 8px rgba(0,0,0,.5);
+  z-index: 2;
+}
+.service-row:hover .art { transform: translateY(-3px); }
+
+/* ============ GALLERY MARQUEE ============ */
+.gallery {
+  padding: 130px 0;
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+}
+.gallery-head {
+  display: flex; align-items: end; justify-content: space-between;
+  gap: 40px; margin-bottom: 60px;
+}
+.gallery-head h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(36px, 4.4vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  max-width: 18ch;
+}
+.gallery-head .meta {
+  text-align: left;
+  font: 500 12px/1.7 var(--sans);
+  letter-spacing: .1em;
+  color: var(--fg-mute);
+}
+.gallery-head .meta b { color: var(--fg); font-weight: 600; }
+.marquee {
+  position: relative;
+  overflow: hidden;
+  padding-inline: 20px;
+  direction: ltr;
+}
+.marquee .mq-track {
+  display: flex; gap: 28px;
+  width: max-content;
+  animation: scrollX 110s linear infinite;
+  direction: ltr;
+}
+.marquee:hover .mq-track { animation-play-state: paused; }
+@keyframes scrollX { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.gallery-tile {
+  position: relative;
+  width: clamp(280px, 28vw, 420px);
+  aspect-ratio: 4 / 5;
+  flex: 0 0 auto;
+}
+.gallery-tile.wide { width: clamp(420px, 38vw, 580px); aspect-ratio: 5 / 4; }
+.gallery-tile .ph { width: 100%; height: 100%; }
+.gallery-tile .ph::after { content: none; }
+.gallery-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-tile .lbl {
+  position: absolute; inset: auto auto 14px 16px;
+  font: 500 12px/1 var(--sans);
+  letter-spacing: .08em; color: var(--fg);
+  text-shadow: 0 2px 12px rgba(0,0,0,.6);
+  direction: rtl;
+}
+.gallery-tile .lbl .idx { color: var(--accent); margin-inline-end: 8px; direction: ltr; unicode-bidi: isolate; }
+
+/* ============ STATS ============ */
+.stats {
+  padding: 130px var(--gutter);
+  border-top: 1px solid var(--line);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.stat {
+  padding: 30px 28px;
+  border-left: 1px solid var(--line);
+}
+.stat:last-child { border-left: none; }
+.stat .top {
+  font: 500 12px/1 var(--sans);
+  letter-spacing: .12em; color: var(--accent);
+  margin-bottom: 26px;
+}
+.stat .big {
+  display: flex; align-items: baseline; gap: 6px;
+  justify-content: flex-end;
+  direction: ltr; unicode-bidi: isolate;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(56px, 7vw, 104px);
+  line-height: .9;
+  letter-spacing: -.02em;
+  color: var(--fg);
+}
+.stat .big .num { direction: ltr; unicode-bidi: isolate; }
+.stat .big .unit {
+  font-size: clamp(24px, 3vw, 44px);
+  color: var(--accent);
+  font-weight: 300;
+}
+.stat.years .big { direction: rtl; justify-content: flex-start; }
+.stat .lbl {
+  margin-top: 18px;
+  font-size: 14px; color: var(--fg-2);
+  line-height: 1.5;
+  max-width: 22ch;
+}
+.stat .big .noun { display: none; }
+.stat .mobile-only-prefix { display: none; }
+.stat .desktop-only-suffix { display: inline; }
+
+/* ============ TESTIMONIALS ============ */
+.testi { padding: 130px var(--gutter); border-top: 1px solid var(--line); }
+.testi-head {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 80px;
+  margin-bottom: 70px;
+}
+.testi-head h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(32px, 3.8vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  max-width: 16ch;
+}
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testi-card {
+  padding: 38px 32px 30px;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+  position: relative;
+  display: flex; flex-direction: column;
+}
+.testi-card .q {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.testi-card p {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--fg);
+  flex: 1;
+  text-wrap: pretty;
+}
+.testi-card .who {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.testi-card .who .name { color: var(--fg); font-weight: 600; }
+.testi-card .who .loc { color: var(--fg-mute); font: 500 12px/1 var(--sans); letter-spacing: .08em; }
+
+/* ============ CTA BLOCK ============ */
+.cta-block {
+  padding: 130px var(--gutter);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.cta-block h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(40px, 5.6vw, 88px);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  margin: 18px auto 36px;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+.cta-block h2 em { font-style: italic; color: var(--accent); }
+.cta-block .row {
+  display: inline-flex; gap: 12px; align-items: center;
+  flex-wrap: wrap; justify-content: center;
+}
+
+/* ============ FOOTER ============ */
+.footer { padding: 80px var(--gutter) 50px; border-top: 1px solid var(--line); }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  margin-bottom: 0;
+}
+.footer-brand .mark { font: 700 28px/1 var(--serif); margin-bottom: 18px; display: block; letter-spacing: -.01em; }
+.footer-brand p { color: var(--fg-mute); font-size: 14px; line-height: 1.7; max-width: 32ch; }
+.fcol h4 {
+  font: 500 12px/1 var(--sans);
+  letter-spacing: .12em; color: var(--accent);
+  margin-bottom: 22px;
+  text-align: start;
+}
+.fcol a, .fcol p { display: block; font-size: 14px; color: var(--fg-2); margin-bottom: 10px; line-height: 1.6; text-align: start; }
+.fcol a:hover { color: var(--fg); }
+.fcol a.ltr { unicode-bidi: isolate; }
+.footer-bottom {
+  display: flex; justify-content: space-between;
+  padding-top: 28px; border-top: 1px solid var(--line);
+  color: var(--fg-mute); font: 500 12px/1.4 var(--sans); letter-spacing: .08em;
+  gap: 20px; flex-wrap: wrap;
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .mq-track { animation: none !important; transform: none !important; }
+  .fab .pulse { animation: none !important; }
+  [data-parallax] { transform: none !important; }
+}
+
+/* ============ STICKY WHATSAPP FAB ============ */
+.fab {
+  position: fixed;
+  inset: auto 28px 28px auto;
+  z-index: 60;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 22px 14px 18px;
+  background: #25d366;
+  color: #0a2317;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 999px;
+  box-shadow: 0 18px 50px -16px rgba(37,211,102,.5), 0 4px 12px rgba(0,0,0,.4);
+  transform: translateY(20px) scale(.94);
+  opacity: 0; pointer-events: none;
+  transition: transform .35s cubic-bezier(.2,.7,.3,1), opacity .35s, background .25s;
+}
+.fab.visible { transform: none; opacity: 1; pointer-events: auto; }
+.fab svg { width: 22px; height: 22px; flex: 0 0 22px; }
+.fab:hover { background: #2bd870; }
+.fab .pulse {
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(37,211,102,.55);
+  animation: pulse 2.2s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(37,211,102,.55); }
+  70%  { box-shadow: 0 0 0 22px rgba(37,211,102,0);  }
+  100% { box-shadow: 0 0 0 0   rgba(37,211,102,0);  }
+}
+
+/* SVG decoration in hero */
+.hero-deco {
+  position: absolute;
+  inset: 100px 0 0 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-deco .ring {
+  position: absolute;
+  width: 520px; height: 520px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.hero-deco .ring.a { top: 80px; left: -160px; }
+.hero-deco .ring.b { top: 120px; left: -120px; width: 420px; height: 420px; }
+
+/* ============ SMALL DESKTOP — tighter clamp so 2-col title doesn't wrap ============ */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .hero { gap: 40px; }
+  .hero h1 { font-size: clamp(44px, 4.6vw, 58px); }
+  .hero-sub { font-size: 16px; }
+}
+
+/* ============ TABLET ============ */
+@media (max-width: 1024px) {
+  :root { --gutter: 36px; }
+  .nav { display: none; }
+  .header-inner { grid-template-columns: 1fr auto; }
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 44px;
+    padding: 120px var(--gutter) 70px;
+    min-height: auto;
+    align-items: start;
+  }
+  .hero-art { order: -1; max-width: 480px; margin-inline-start: auto; width: 100%; }
+  .hero-foot { position: static; margin-top: 36px; }
+  .hero h1 { font-size: clamp(48px, 8vw, 72px); }
+  .about-grid, .services-wrap, .testi-head { grid-template-columns: 1fr; gap: 28px; }
+  .services-sticky { position: static; top: auto; }
+  .service-row { grid-template-columns: 1fr; gap: 14px 24px; padding: 36px 0; }
+  .service-row .art { aspect-ratio: 5 / 4; margin-top: 14px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat:nth-child(2) { border-left: none; }
+  .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .testi-grid { grid-template-columns: 1fr; gap: 16px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+
+/* ============ TABLET — creative full-bleed hero + service list 2x2 grid ============ */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .service-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 0 36px;
+  }
+  .service-row { padding: 40px 0; }
+
+  .hero {
+    position: relative;
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0;
+    min-height: 100vh;
+    align-items: stretch;
+  }
+  .hero-deco { display: none; }
+  .hero-art {
+    order: 0;
+    position: absolute;
+    inset: 0;
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    z-index: 0;
+    align-self: stretch;
+  }
+  .portrait {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  .portrait img {
+    object-position: center 28%;
+    top: 0;
+    height: 100%;
+  }
+  .portrait::after {
+    background:
+      linear-gradient(180deg, rgba(22,19,16,.3) 0%, rgba(22,19,16,0) 28%, rgba(22,19,16,.55) 60%, rgba(22,19,16,.94) 92%);
+  }
+  .portrait-frame { display: none; }
+  .hero-text {
+    position: relative;
+    z-index: 2;
+    padding: 120px var(--gutter) 56px;
+    margin-top: auto;
+    width: 100%;
+    text-align: right;
+  }
+  .hero-meta { margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(56px, 8.4vw, 88px);
+    margin-bottom: 22px;
+    line-height: 1;
+    text-shadow: 0 2px 24px rgba(0,0,0,.5);
+  }
+  .hero-sub {
+    font-size: 17px;
+    line-height: 1.55;
+    color: #ddd0b8;
+    max-width: 56ch;
+    margin-bottom: 28px;
+    text-shadow: 0 1px 18px rgba(0,0,0,.55);
+  }
+  .hero-cta { gap: 14px; }
+  .hero-foot {
+    position: absolute;
+    inset: auto var(--gutter) 24px var(--gutter);
+    margin: 0;
+    color: var(--fg-mute);
+  }
+}
+
+/* ============ MOBILE ============ */
+@media (max-width: 640px) {
+  :root { --gutter: 20px; }
+  body { font-size: 15px; }
+  html { overflow-x: hidden; }
+
+  .header {
+    padding: 14px var(--gutter);
+    background: rgba(22,19,16,.72);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+  .header.shrunk { padding: 10px var(--gutter); background: rgba(22,19,16,.86); }
+  .brand { gap: 8px; }
+  .brand .mark { font-size: 19px; }
+  .brand .est { display: none; }
+  .header-cta { gap: 8px; }
+  .header-cta .btn-ghost { display: none; }
+  .header-cta .btn-primary {
+    padding: 12px 18px;
+    font-size: 13px;
+    gap: 8px;
+    min-height: 44px;
+  }
+  .header-cta .btn-primary svg { width: 14px; height: 14px; flex: 0 0 14px; }
+
+  .hero { padding: 94px var(--gutter) 50px; gap: 36px; }
+  .hero-art { max-width: none; margin: 0; width: 100%; }
+  .portrait-frame { inset: 12px -12px -12px 12px; }
+  .hero-meta { margin-bottom: 24px; font-size: 12px; gap: 10px; }
+  .hero-meta .tag { padding: 5px 11px; font-size: 11px; }
+  .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.05; margin-bottom: 26px; letter-spacing: -.025em; }
+  .hero-sub { font-size: 16.5px; line-height: 1.6; margin-bottom: 30px; }
+  .hero-cta { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
+  .cta-primary {
+    padding: 17px 22px;
+    font-size: 15px;
+    justify-content: center;
+    min-height: 50px;
+  }
+  .cta-secondary {
+    padding: 16px 0 14px;
+    justify-content: center;
+    font-size: 14.5px;
+    border-bottom: none;
+    border-top: none;
+    margin-top: 6px;
+    min-height: 48px;
+  }
+  .hero-deco .ring { display: none; }
+  .hero-foot { flex-direction: column; align-items: flex-start; gap: 14px; margin-top: 36px; }
+  .hero-foot .qmark { text-align: right; }
+
+  .ticker { padding: 18px var(--gutter); }
+  .ticker .mq-track { gap: 32px; animation-duration: 30s; }
+  .ticker span,
+  .ticker span.em { font-size: 14px; }
+
+  .about { padding: 80px var(--gutter) 60px; }
+  .about-grid { gap: 22px; }
+  .about-body h2 { font-size: clamp(34px, 9.5vw, 48px); margin-bottom: 26px; max-width: none; line-height: 1.05; }
+  .about-cols { grid-template-columns: 1fr; gap: 0; margin-top: 12px; }
+  .about-cols p + p { margin-top: 18px; }
+  .about-cols p { font-size: 16px; line-height: 1.75; }
+  .signature { font-size: 20px; margin-top: 32px; }
+  .about-label .ttl { margin-top: 10px; }
+
+  .services { padding: 70px 0 0; }
+  .service-row:last-child { padding-bottom: 0; }
+  .services-wrap { gap: 36px; }
+  .services-sticky h2 { font-size: clamp(34px, 9.5vw, 48px); }
+  .services-sticky p,
+  .service-row p { font-size: 16px; line-height: 1.7; max-width: none; }
+  .service-row { padding: 30px 0; gap: 10px 18px; grid-template-columns: 1fr; }
+  .service-row h3 { font-size: clamp(18px, 6.5vw, 24px); line-height: 1.15; }
+  .service-row .he-sub { font-size: 10px; margin-bottom: 12px; }
+  .service-row .art { margin-top: 8px; }
+
+  .gallery { padding: 70px 0; border-top: none; }
+  .gallery-head { flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 36px; }
+  .gallery-head h2 { font-size: clamp(32px, 9.5vw, 46px); max-width: none; }
+  .gallery-head .meta { text-align: right; }
+  .gallery-tile { width: 74vw; }
+  .gallery-tile.wide { width: 86vw; aspect-ratio: 5 / 4; }
+  .gallery-tile .lbl {
+    inset: auto 14px 14px auto;
+    font-size: 11.5px;
+    background: rgba(22,19,16,.7);
+    padding: 6px 10px;
+  }
+  .marquee .mq-track { gap: 18px; animation-duration: 75s; }
+
+  .stats { padding: 70px var(--gutter); }
+  .stat { padding: 24px 14px; }
+  .stat .big { font-size: 56px; gap: 4px; white-space: nowrap; }
+  .stat .big .unit { font-size: 22px; }
+  .stat .top { font-size: 11px; margin-bottom: 16px; letter-spacing: .1em; }
+  .stat .lbl { font-size: 13px; margin-top: 14px; line-height: 1.5; }
+
+  .testi { padding: 70px var(--gutter); }
+  .testi-head { margin-bottom: 40px; gap: 20px; }
+  .testi-head h2 { font-size: clamp(28px, 8vw, 38px); max-width: none; }
+  .testi-card { padding: 28px 22px 22px; }
+  .testi-card p { font-size: 18px; line-height: 1.55; }
+  .testi-card .q { font-size: 28px; }
+  .testi-card .who { margin-top: 22px; padding-top: 18px; }
+
+  .cta-block { padding: 90px var(--gutter) 80px; }
+  .cta-block h2 { font-size: clamp(40px, 12vw, 62px); margin-bottom: 28px; }
+  .cta-block p { font-size: 16px !important; margin-bottom: 32px !important; line-height: 1.65 !important; }
+  .cta-block .row { flex-direction: column; gap: 12px; width: 100%; }
+  .cta-block .cta-primary, .cta-block .cta-secondary { width: 100%; justify-content: center; }
+
+  .footer { padding: 60px var(--gutter) 32px; }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 36px;
+  }
+  .footer-brand { padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+  .footer-brand .mark { font-size: 22px; margin-bottom: 12px; }
+  .footer-brand p { max-width: none; font-size: 14px; line-height: 1.7; }
+  .fcol { padding-bottom: 4px; }
+  .fcol h4 { margin-bottom: 14px; font-size: 11.5px; letter-spacing: .14em; }
+  .fcol a, .fcol p {
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-align: start;
+    direction: rtl;
+  }
+  .fcol a.ltr {
+    direction: ltr;
+    text-align: right;
+    unicode-bidi: isolate;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+    font-size: 11px;
+    letter-spacing: .1em;
+    padding-top: 22px;
+    text-align: start;
+  }
+  .footer-bottom span { display: block; text-align: start; }
+
+  .fab { display: none !important; }
+}
+
+/* very small phones */
+@media (max-width: 380px) {
+  :root { --gutter: 20px; }
+  .brand .mark { font-size: 17.5px; }
+  .header-cta .btn-primary { padding: 10px 13px; font-size: 12px; gap: 6px; }
+  .header-cta .btn-primary svg { width: 13px; height: 13px; flex: 0 0 13px; }
+  .hero-sub { font-size: 15.5px; }
+  .stat .big { font-size: 72px; }
+  .stat .big .unit { font-size: 28px; }
+}
+
+/* ============ MOBILE POLISH (match desktop craft) ============ */
+@media (max-width: 640px) {
+  /* ambient warm glow behind hero */
+  .hero { overflow: visible; }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 80px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 92vw; height: 92vw;
+    max-width: 540px; max-height: 540px;
+    background: radial-gradient(circle, rgba(199,154,107,.18), transparent 65%);
+    filter: blur(48px);
+    pointer-events: none;
+    animation: heroGlow 9s ease-in-out infinite;
+    z-index: 0;
+  }
+  .hero-text, .hero-art, .hero-foot { position: relative; z-index: 1; }
+  @keyframes heroGlow {
+    0%, 100% { opacity: .65; transform: translateX(50%) scale(1); }
+    50%      { opacity: 1;   transform: translateX(50%) scale(1.08); }
+  }
+
+  /* slower, richer reveals on phone */
+  .reveal { transition-duration: 1.05s; }
+
+  /* services — full-bleed image, quiet chapter eyebrow */
+  .service-row {
+    padding-block: 40px 50px;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .service-row h3 { font-size: clamp(18px, 6vw, 24px); line-height: 1.2; }
+  .service-row .he-sub { margin-bottom: 14px; letter-spacing: .12em; }
+  .services-sticky p,
+  .service-row p { font-size: 16px; line-height: 1.7; max-width: none; }
+  .service-row .art {
+    margin-inline: calc(-1 * var(--gutter));
+    aspect-ratio: 5 / 4;
+    width: auto;
+    margin-top: 18px;
+  }
+
+  /* stats — number+noun on one line, description below */
+  .stats { padding: 70px var(--gutter); }
+  .stats-grid { grid-template-columns: 1fr; gap: 0; }
+  .stat {
+    padding: 28px 0 30px;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    display: block;
+  }
+  .stat:first-child { padding-top: 4px; }
+  .stat:last-child { border-bottom: none; padding-bottom: 4px; }
+  .stat .top { display: none; }
+  .stat .big {
+    font-size: clamp(54px, 16vw, 72px);
+    line-height: 1;
+    gap: 10px;
+    white-space: nowrap;
+    align-items: baseline;
+    direction: rtl;
+    justify-content: flex-start;
+  }
+  .stat.years .big { justify-content: flex-start; }
+  .stat .big .num {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+  .stat .big .unit {
+    font-size: clamp(22px, 6vw, 28px);
+    line-height: 1;
+    color: var(--accent);
+    font-weight: 300;
+  }
+  .stat .big .noun {
+    display: inline-block;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(20px, 5.6vw, 26px);
+    color: var(--fg-2);
+    letter-spacing: -.01em;
+  }
+  .stat .lbl {
+    margin-top: 12px;
+    padding-top: 0;
+    max-width: none;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--fg-2);
+  }
+  .stat .mobile-only-prefix { display: inline; }
+  .stat .desktop-only-suffix { display: none; }
+
+  /* gallery — native horizontal snap-scroll, no auto-marquee on phone */
+  .marquee {
+    padding-inline: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    direction: rtl;
+  }
+  .marquee::-webkit-scrollbar { display: none; }
+  .marquee .mq-track {
+    animation: none !important;
+    width: max-content;
+    gap: 12px;
+    padding-inline: 20px 40%;
+    direction: rtl;
+  }
+  .gallery-tile, .gallery-tile.wide { scroll-snap-align: start; }
+  .gallery-tile { width: 76vw; }
+  .gallery-tile.wide { width: 86vw; aspect-ratio: 5 / 4; }
+
+  /* testimonials — horizontal snap-scroll with peek */
+  .testi-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 20px;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    padding-bottom: 16px;
+    direction: rtl;
+    scrollbar-width: none;
+  }
+  .testi-grid::-webkit-scrollbar { display: none; }
+  .testi-card { scroll-snap-align: start; }
+
+  /* tap interactions — replace hover with active scale on phone */
+  .cta-primary, .cta-secondary, .btn, .fab {
+    transition: transform .14s cubic-bezier(.2,.7,.3,1), background .25s, color .25s, border-color .25s, box-shadow .25s;
+  }
+  .cta-primary:active, .btn:active, .fab:active, .cta-secondary:active {
+    transform: scale(.97);
+  }
+  /* disable hover-translate on touch — it sticks after a tap */
+  @media (hover: none) {
+    .cta-primary:hover { transform: none; box-shadow: none; }
+    .btn-ghost:hover { color: #ece1cf; border-color: rgba(236,225,207,.35); }
+    .btn-primary:hover { background: #ece1cf; color: var(--bg); }
+    .fab:hover { background: #25d366; }
+    .nav a:hover::after { transform: scaleX(0); }
+  }
+}
+</style>
+</head>
+<body dir="ltr">
+
+<!-- ================= HEADER ================= -->
+<header class="header" data-shrink-header>
+  <div class="header-inner">
+    <a href="#top" class="brand">
+      <img src="assets/avi-logo.svg" alt="" class="logo" aria-hidden="true" />
+      <span class="mark">אבי קריספין</span>
+      <span class="est">נגרות בהתאמה אישית</span>
+    </a>
+    <nav class="nav">
+      <a href="#about">הסטודיו</a>
+      <a href="#services">שירותים</a>
+      <a href="#gallery">עבודות</a>
+      <a href="#testi">המלצות</a>
+      <a href="#contact">צרו קשר</a>
+    </nav>
+    <div class="header-cta">
+      <a href="tel:+972544750918" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg>
+        <span style="direction:ltr; unicode-bidi: isolate;">054-475-0918</span>
+      </a>
+      <a href="https://wa.me/972544750918?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%91%D7%99%21%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%94%D7%90%D7%AA%D7%A8" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5C6.2 2.5 1.5 6.7 1.5 11.9c0 1.85.6 3.6 1.7 5.1L1.5 21.5l4.7-1.6c1.45.85 3.1 1.3 4.8 1.3 5.8 0 10.5-4.2 10.5-9.3S17.8 2.5 12 2.5z"/></svg>
+        וואטסאפ
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<main id="top">
+<section class="hero wrap" style="font-weight: 400;">
+  <div class="hero-deco" data-parallax="0.08">
+    <div class="ring a"></div>
+    <div class="ring b"></div>
+  </div>
+
+  <div class="hero-text">
+    <h1 class="reveal delay-1" data-comment-anchor="2fbc468622-div" style="font-weight: 400">
+      <span class="line"><em>נגרות</em> בהתאמה אישית.</span><br />
+      <span class="line"><em>שדרוג</em> רהיטים קיימים.</span>
+    </h1>
+    <p class="hero-sub reveal delay-2">
+      עם מעל 30 שנות ניסיון, אבי קריספין מתכנן, בונה ומשדרג רהיטים וחללי בית בהתאמה אישית — מהשיחה הראשונה ועד למסירה, בעבודה מדויקת, אישית וללא קבלני משנה.
+    </p>
+    <div class="hero-cta reveal delay-3">
+      <a href="https://wa.me/972544750918?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%91%D7%99%21%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%94%D7%90%D7%AA%D7%A8" target="_blank" rel="noopener" class="cta-primary">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 2.5C6.2 2.5 1.5 6.7 1.5 11.9c0 1.85.6 3.6 1.7 5.1L1.5 21.5l4.7-1.6c1.45.85 3.1 1.3 4.8 1.3 5.8 0 10.5-4.2 10.5-9.3S17.8 2.5 12 2.5z"/></svg>
+        שלחו וואטסאפ
+      </a>
+      <a href="tel:+972544750918" class="cta-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="16" height="16"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        חייגו עכשיו — <span class="num">054-475-0918</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-art reveal delay-2">
+    <div class="portrait">
+      <div class="portrait-frame"></div>
+      <img src="assets/avi-portrait.png" alt="אבי קריספין בסטודיו" data-parallax="0.12" />
+    </div>
+  </div>
+</section>
+
+<!-- ================= TICKER ================= -->
+<div class="ticker">
+  <div class="mq-track" data-comment-anchor="3fa7e279d7-div">
+    <span class="em">נגרות בהתאמה אישית</span><span class="dot"></span>
+    <span>ושדרוג ריהוט קיים</span><span class="dot"></span>
+    <span class="em">סטודיו אישי</span><span class="dot"></span>
+    <span>ללא קבלני משנה</span><span class="dot"></span>
+    <span class="em">מעל 30 שנות ניסיון</span><span class="dot"></span>
+    <span>צפון הארץ</span><span class="dot"></span>
+    <span class="em">תכנון · בנייה · גימור</span><span class="dot"></span>
+    <span>מהשיחה ועד למסירה</span><span class="dot"></span>
+  </div>
+</div>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="about wrap">
+  <div class="about-grid">
+    <div class="about-label reveal">
+      <div class="num">01 / על הסטודיו</div>
+    </div>
+    <div class="about-body">
+      <h2 class="reveal" style="max-width:24ch">מבניית רהיטים <em>מותאמים</em><br/>ועד שדרוג רהיטים <em>קיימים.</em></h2>
+      <div class="about-cols">
+        <p class="reveal delay-1">
+          אני אבי. מעל 30 שנה שאני בונה ומשדרג רהיטים בהתאמה אישית, ועובד עם בתים וחללים שצריכים פתרון מדויק — לא משהו גנרי.
+        </p>
+        <p class="reveal delay-2" style="margin: 0px">
+          כל רהיט נבנה מתוך הקשבה לבית, למידות, לחומרים ולדרך שבה באמת חיים בחלל. אני מאמין שריהוט טוב צריך להרגיש טבעי בבית, לא כאילו הוכנס אליו בכוח.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section id="services" class="services">
+  <div class="wrap services-wrap">
+    <div class="services-sticky reveal">
+      <div class="num">02 / מה אני עושה</div>
+      <h2>ארבעה תחומים,<br/><span class="serif">אותה יד.</span></h2>
+      <p>כל הפרויקטים נעשים כאן בסטודיו — מהתכנון ועד הגימור. אותו אדם, אותה אחריות, מההתחלה ועד הסוף.</p>
+    </div>
+
+    <div class="service-list">
+      <article class="service-row reveal">
+        <div class="text">
+          <h3>ריהוט בהתאמה אישית</h3>
+          <div class="he-sub">תכנון · בנייה · גימור ידני</div>
+          <p>ארונות, ספריות, יחידות אחסון ובילט־אין. תכנון מדויק לחלל ולשימוש, עץ מלא או פורניר, גימור ידני שמתאים לבית ולתקציב.</p>
+        </div>
+        <div class="art"><img src="assets/service-custom-cabinet.png" alt="יחידת טלוויזיה בהתאמה אישית עם חיפוי עץ וספרייה פתוחה" /><span class="caption">מזנון בשילוב ארונות וחיפוי בהתאמה אישית</span></div>
+      </article>
+
+      <article class="service-row reveal">
+        <div class="text">
+          <h3>שדרוג ושיקום ריהוט</h3>
+          <div class="he-sub">שדרוג · שיקום · התאמה</div>
+          <p>רהיטים שאתם אוהבים — מקבלים חיים חדשים. ליטוש מחדש, החלפת חזיתות וידיות, התאמת מידות למעבר דירה, או שדרוג מהותי שמרגיש כמו חדש.</p>
+        </div>
+        <div class="art"><img src="assets/service-kitchen-upgrade.png" alt="מטבח לבן עם ידיות שחורות לאחר שדרוג" /><span class="caption">שיקום ושדרוג מטבח ישן</span></div>
+      </article>
+
+      <article class="service-row reveal">
+        <div class="text">
+          <h3>חיפויי קיר ופאנלים אקוסטיים</h3>
+          <div class="he-sub">עץ · אקוסטיקה · עיצוב</div>
+          <p>קיר אחד שמשנה את כל החלל. חיפויי עץ, פאנלים אקוסטיים ופתרונות שמשלבים מראה, אקוסטיקה ופונקציה — מתוכננים לחלל הספציפי.</p>
+        </div>
+        <div class="art"><img src="assets/service-wall-cladding.png" alt="חיפוי קיר בסלון עם פאנלי מסגרת וחריצי עץ" /><span class="caption">חיפוי קיר לסלון בעיצוב אישי</span></div>
+      </article>
+
+      <article class="service-row reveal">
+        <div class="text">
+          <h3>קונסולות ופריטי מפתח</h3>
+          <div class="he-sub">קונסולות · יחידות מרכזיות</div>
+          <p>קונסולת כניסה, יחידת טלוויזיה, שולחן צד או יחידה מרכזית בסלון. שילובי עץ, מתכת ואבן בתכנון לחלל הספציפי שלכם.</p>
+        </div>
+        <div class="art"><img src="assets/service-console.png" alt="קונסולת כניסה בשילוב מסגרת מתכת שחורה ומראה" /><span class="caption">קונסולה מעץ מלא בשילוב מתכת</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY MARQUEE ================= -->
+<section id="gallery" class="gallery">
+  <div class="wrap">
+    <div class="gallery-head">
+      <div class="reveal">
+        <div class="eyebrow-row" style="margin-bottom:24px">
+          <span class="kicker">03 / גלריה</span>
+        </div>
+        <h2>מבחר עבודות<br/>מהשנים האחרונות.</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee reveal">
+    <div class="mq-track">
+      <div class="gallery-tile wide"><img src="assets/gallery-01.png" alt="ארון מדפים פתוח בחדר ארונות" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-02.png" alt="מדפי עץ צפים בכניסה לבית" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-03.png" alt="חיפוי קיר בעיצוב גיאומטרי לאחורי הטלוויזיה" /></div>
+      <div class="gallery-tile wide"><img src="assets/gallery-04.png" alt="מדפי קיר דקורטיביים בשחור ולבן" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-05.png" alt="ארון הזזה בגוון עץ מולבן" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-06.png" alt="מטבח בגוון בז' עם תנור בילט־אין" /></div>
+      <div class="gallery-tile wide"><img src="assets/gallery-07.png" alt="מזנון ארוך עם רגלי זהב ושיש קלקטה" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-08.png" alt="ארון הזזה עם דלת מראה ושתי דלתות מט" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-09.png" alt="מטבח מודרני בגוון אבן עם ידיות שחורות" /></div>
+      <div class="gallery-tile wide"><img src="assets/gallery-10.png" alt="ארון אמבטיה עם משטח עץ וברז זהב" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-11.png" alt="ארון אמבטיה עם כיור מונח ומשטח עץ" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-12.png" alt="שידת מגירות בגוון אפור עם ידיות שחורות" /></div>
+      <div class="gallery-tile wide"><img src="assets/gallery-13.png" alt="יחידת אחסון לבנה עם מדף עץ פתוח" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-14.png" alt="ספרייה בעץ מלא לצד חיפוי קיר ופאנל שיש" /></div>
+      <div class="gallery-tile"><img src="assets/gallery-15.png" alt="עגלת אחסון בעץ ומסגרת מתכת שחורה" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="stats wrap">
+  <div class="eyebrow-row reveal" style="margin-bottom:50px">
+    <span class="kicker">04 / הסטודיו במספרים</span>
+  </div>
+  <div class="stats-grid">
+    <div class="stat years reveal">
+      <div class="top">ניסיון</div>
+      <div class="big"><span class="num" data-count="30">30</span><span class="unit">שנים</span></div>
+      <div class="lbl"><span class="mobile-only-prefix">ניסיון </span>בנגרות בהתאמה אישית</div>
+    </div>
+    <div class="stat reveal delay-1">
+      <div class="top">פרויקטים</div>
+      <div class="big"><span class="num" data-count="340">340</span><span class="unit">+</span></div>
+      <div class="lbl"><span class="mobile-only-prefix">פרויקטים ב</span>בתים פרטיים, דירות ומשרדים<span class="desktop-only-suffix"> בכל הארץ</span></div>
+    </div>
+    <div class="stat reveal delay-2">
+      <div class="top">ליווי אישי</div>
+      <div class="big"><span class="num">1:1</span></div>
+      <div class="lbl">סטודיו אישי. אותו אדם — מהשיחה הראשונה ועד למסירה</div>
+    </div>
+    <div class="stat reveal delay-3">
+      <div class="top">עבודת יד</div>
+      <div class="big"><span class="num" data-count="100">100</span><span class="unit">%</span></div>
+      <div class="lbl">עבודת יד אישית, ללא התפשרות על איכות</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section id="testi" class="testi wrap">
+  <div class="testi-head">
+    <div class="about-label reveal">
+      <div class="num">05 / מה הלקוחות אומרים</div>
+    </div>
+    <h2 class="reveal">ההמלצות הכי טובות<br/>נכתבות אחרי <em style="font-style:italic;color:var(--accent);margin-inline-start:3px">המסירה.</em></h2>
+  </div>
+  <div class="testi-grid">
+    <article class="testi-card reveal">
+      <span class="q">״</span>
+      <p>אבי לא רק ביצע — הוא חשב יחד איתנו על איך הבית שלנו צריך להרגיש. התוצאה היא יחידה שאי אפשר לדמיין את הסלון בלעדיה.</p>
+      <div class="who"><span class="name">מיכל ויואב</span><span class="loc">עכו</span></div>
+    </article>
+    <article class="testi-card reveal delay-1">
+      <span class="q">״</span>
+      <p>שדרגנו ארון מהמטבח הישן במקום להחליף את כל המטבח. כל אורח שואל איפה קנינו אותו. רמת גימור שלא ראינו בעבודות קודמות.</p>
+      <div class="who"><span class="name">דנה לוי</span><span class="loc">מעלות</span></div>
+    </article>
+    <article class="testi-card reveal delay-2">
+      <span class="q">״</span>
+      <p>קיר חיפוי עץ בכניסה הפך את הדירה לאחרת לגמרי. אבי הגיע עם רעיון, חזר עם תוכנית מדויקת, ביצע בלי הפתעות. נדיר.</p>
+      <div class="who"><span class="name">יוסי ב.</span><span class="loc">נהריה</span></div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= CTA BLOCK ================= -->
+<section id="contact" class="cta-block wrap">
+  <div class="eyebrow-row reveal" style="justify-content:center; margin-bottom:8px;">
+    <span class="kicker">06 / מתחילים</span>
+  </div>
+  <h2 class="reveal delay-1">מתחילים<br/>בשיחה <em>קצרה</em>.</h2>
+  <p class="reveal delay-2" style="color:var(--fg-2); max-width:48ch; margin:0 auto 44px; font-size:18px; line-height:1.65;">
+    ספרו לי על החלל, על הרהיטים שאתם רוצים להחליף, או על הקיר שעדיין מחכה. אחרי שיחה קצרה כבר נדע איך להתקדם.
+  </p>
+  <div class="row reveal delay-3">
+    <a href="https://wa.me/972544750918?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%91%D7%99%21%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%94%D7%90%D7%AA%D7%A8" target="_blank" rel="noopener" class="cta-primary">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 2.5C6.2 2.5 1.5 6.7 1.5 11.9c0 1.85.6 3.6 1.7 5.1L1.5 21.5l4.7-1.6c1.45.85 3.1 1.3 4.8 1.3 5.8 0 10.5-4.2 10.5-9.3S17.8 2.5 12 2.5z"/></svg>
+      שלחו וואטסאפ
+    </a>
+    <a href="tel:+972544750918" class="cta-secondary"><span class="arrow">←</span> חייגו עכשיו — <span class="num">054-475-0918</span></a>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer wrap">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="mark">אבי קריספין</span>
+      <p>סטודיו אישי לנגרות בהתאמה אישית ושדרוג ריהוט. מעל 30 שנות ניסיון. צפון הארץ.</p>
+    </div>
+    <div class="fcol">
+      <h4>— צרו קשר</h4>
+      <a href="tel:+972544750918">התקשרו <span class="ltr">054-475-0918</span></a>
+      <a href="https://wa.me/972544750918?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%91%D7%99%21%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%94%D7%90%D7%AA%D7%A8" target="_blank" rel="noopener">או שלחו הודעה בוואטסאפ</a>
+    </div>
+    <div class="fcol">
+      <h4>— אזורי שירות</h4>
+      <p>נהריה · עכו · הקריות · חיפה</p>
+      <p>הגליל המערבי · אזור הצפון</p>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<!-- ================= STICKY WHATSAPP FAB ================= -->
+<a href="https://wa.me/972544750918?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%91%D7%99%21%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%94%D7%90%D7%AA%D7%A8" target="_blank" rel="noopener" class="fab" data-fab>
+  <span class="pulse"></span>
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5C6.2 2.5 1.5 6.7 1.5 11.9c0 1.85.6 3.6 1.7 5.1L1.5 21.5l4.7-1.6c1.45.85 3.1 1.3 4.8 1.3 5.8 0 10.5-4.2 10.5-9.3S17.8 2.5 12 2.5z"/></svg>
+  שלחו וואטסאפ
+</a>
+
+<script src="shared.js"></script>
+</body>
+</html>
