@@ -98,6 +98,94 @@
     tick();
   }
 
+  // ---- carousel navigation (reusable for any horizontal scroll container) ----
+  // Usage:
+  //   <div data-carousel>...</div>                      → arrows overlay the scroll area
+  //   <div data-carousel data-carousel-nav="...">...    → arrows render inside the target selector
+  //   data-carousel-step="0.85" → override per-click scroll fraction of clientWidth
+  function initCarouselNav(scrollEl) {
+    if (!scrollEl || scrollEl.dataset.carouselInit) return;
+    scrollEl.dataset.carouselInit = '1';
+
+    const isRTL = getComputedStyle(scrollEl).direction === 'rtl';
+    const stepFraction = parseFloat(scrollEl.dataset.carouselStep || '0.85');
+    const navTargetSel = scrollEl.dataset.carouselNav;
+    const navTarget = navTargetSel ? document.querySelector(navTargetSel) : null;
+
+    const nav = document.createElement('div');
+    nav.className = 'carousel-nav';
+    if (navTarget) {
+      navTarget.appendChild(nav);
+    } else {
+      // Fallback: overlay the buttons across the scroll container
+      const wrap = document.createElement('div');
+      wrap.className = 'carousel-wrap';
+      scrollEl.parentNode.insertBefore(wrap, scrollEl);
+      wrap.appendChild(scrollEl);
+      wrap.appendChild(nav);
+      nav.classList.add('carousel-nav-overlay');
+    }
+
+    const chevron = (dir) => {
+      const d = dir === 'left' ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6';
+      return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+    };
+    const makeBtn = (cls, label, dir) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'carousel-btn ' + cls;
+      b.setAttribute('aria-label', label);
+      b.innerHTML = chevron(dir);
+      return b;
+    };
+
+    // Physically: LEFT button has left-pointing chevron, RIGHT button has right-pointing chevron.
+    // In RTL the LEFT button means "next/forward" (more content). In LTR the RIGHT button means "next".
+    const nextBtn = makeBtn('next', 'הבא', isRTL ? 'left' : 'right');
+    const prevBtn = makeBtn('prev', 'הקודם', isRTL ? 'right' : 'left');
+    // Container is direction:ltr, so first appended = left, second = right.
+    if (isRTL) {
+      nav.appendChild(nextBtn); // left
+      nav.appendChild(prevBtn); // right
+    } else {
+      nav.appendChild(prevBtn); // left
+      nav.appendChild(nextBtn); // right
+    }
+
+    const forwardSign = isRTL ? -1 : 1;
+    const step = () => Math.max(120, scrollEl.clientWidth * stepFraction);
+
+    nextBtn.addEventListener('click', () => {
+      scrollEl.scrollBy({ left: forwardSign * step(), behavior: 'smooth' });
+    });
+    prevBtn.addEventListener('click', () => {
+      scrollEl.scrollBy({ left: -forwardSign * step(), behavior: 'smooth' });
+    });
+
+    const update = () => {
+      const max = scrollEl.scrollWidth - scrollEl.clientWidth;
+      if (max <= 4) {
+        nextBtn.classList.remove('visible');
+        prevBtn.classList.remove('visible');
+        return;
+      }
+      const dist = Math.abs(scrollEl.scrollLeft);
+      const atStart = dist < 4;
+      const atEnd = dist >= max - 4;
+      nextBtn.classList.toggle('visible', !atEnd);
+      prevBtn.classList.toggle('visible', !atStart);
+    };
+
+    scrollEl.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(update).observe(scrollEl);
+    }
+    requestAnimationFrame(update);
+  }
+
+  document.querySelectorAll('[data-carousel]').forEach(initCarouselNav);
+
   // ---- sticky WhatsApp reveal on scroll past hero ----
   const fab = document.querySelector('[data-fab]');
   if (fab) {

@@ -739,6 +739,69 @@ body {
   gap: 20px; flex-wrap: wrap;
 }
 
+/* ============ CAROUSEL NAVIGATION (reusable) ============ */
+.carousel-nav {
+  display: flex;
+  gap: 10px;
+  width: fit-content;
+  direction: ltr;            /* keep button order consistent regardless of parent direction */
+}
+/* Default placement when the nav lives inside a section head — sit at the left,
+   vertically aligned with the title, in the empty space next to right-aligned text. */
+.gallery-head, .testi-head { position: relative; }
+.gallery-head > .carousel-nav,
+.testi-head > .carousel-nav {
+  position: absolute;
+  left: -8px;
+  bottom: 0;
+  margin: 0;
+}
+/* Collapse the nav when there are no visible buttons (e.g. no overflow on desktop) */
+.carousel-nav:not(:has(.carousel-btn.visible)) {
+  display: none;
+}
+
+.carousel-wrap { position: relative; }
+.carousel-nav-overlay {
+  position: absolute;
+  inset: 50% 0 auto 0;
+  transform: translateY(-50%);
+  margin: 0;
+  width: 100%;
+  justify-content: space-between;
+  padding-inline: 10px;
+  pointer-events: none;
+  direction: ltr;
+}
+.carousel-nav-overlay .carousel-btn { pointer-events: auto; }
+
+.carousel-btn {
+  flex: 0 0 auto;
+  background: none;
+  border: 0;
+  padding: 6px;
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-4px);
+  transition: opacity .32s cubic-bezier(.2,.7,.3,1),
+              visibility .32s linear,
+              transform .32s cubic-bezier(.2,.7,.3,1),
+              color .2s;
+}
+.carousel-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+.carousel-btn:hover { color: #d8ac7e; }
+.carousel-btn:active { transform: translateX(0) scale(.92); }
+.carousel-btn svg { width: 26px; height: 26px; display: block; stroke-width: 1.6; }
+@media (hover: none) {
+  .carousel-btn:hover { color: var(--accent); }
+}
+
 /* ============ REDUCED MOTION ============ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -940,7 +1003,15 @@ body {
   .portrait-frame { inset: 12px -12px -12px 12px; }
   .hero-meta { margin-bottom: 24px; font-size: 12px; gap: 10px; }
   .hero-meta .tag { padding: 5px 11px; font-size: 11px; }
-  .hero h1 { font-size: clamp(30px, 8.4vw, 48px); line-height: 1.05; margin-bottom: 26px; letter-spacing: -.025em; }
+  .hero h1 {
+    font-size: clamp(30px, 11vw, 60px);
+    line-height: 1.05;
+    margin-bottom: 26px;
+    letter-spacing: -.015em;
+    padding-inline-start: .12em;
+    overflow: visible;
+  }
+  .hero h1 .line { padding-inline-start: .05em; }
   .hero-sub { font-size: 16.5px; line-height: 1.6; margin-bottom: 30px; }
   .hero-cta { flex-direction: column; align-items: stretch; gap: 10px; width: 100%; }
   .cta-primary {
@@ -1265,8 +1336,8 @@ body {
 
   <div class="hero-text">
     <h1 class="reveal delay-1" data-comment-anchor="2fbc468622-div" style="font-weight: 400">
-      <span class="line"><em>נגרות</em> בהתאמה אישית.</span><br />
-      <span class="line"><em>שדרוג</em> רהיטים קיימים.</span>
+      <span class="line">נגרות בהתאמה <em>אישית.</em></span><br />
+      <span class="line">שדרוג רהיטים <em>קיימים.</em></span>
     </h1>
     <p class="hero-sub reveal delay-2">
       עם מעל 30 שנות ניסיון, אבי קריספין מתכנן, בונה ומשדרג רהיטים וחללי בית בהתאמה אישית — מהשיחה הראשונה ועד למסירה, בעבודה מדויקת, אישית וללא קבלני משנה.
@@ -1387,7 +1458,7 @@ body {
     </div>
   </div>
 
-  <div class="marquee reveal">
+  <div class="marquee reveal" data-carousel data-carousel-nav=".gallery-head">
     <div class="mq-track">
       <div class="gallery-tile wide"> <img src="assets/gallery-01.jpg" alt="ארון מדפים פתוח בחדר ארונות" loading="lazy" decoding="async" /></div>
       <div class="gallery-tile"> <img src="assets/gallery-02.jpg" alt="מדפי עץ צפים בכניסה לבית" loading="lazy" decoding="async" /></div>
@@ -1445,7 +1516,7 @@ body {
     </div>
     <h2 class="reveal">ההמלצות הכי טובות<br/>נכתבות אחרי <em style="font-style:italic;color:var(--accent);margin-inline-start:3px">המסירה.</em></h2>
   </div>
-  <div class="testi-grid">
+  <div class="testi-grid" data-carousel data-carousel-nav=".testi-head">
     <article class="testi-card reveal">
       <span class="q">״</span>
       <p>אבי לא רק ביצע — הוא חשב יחד איתנו על איך הבית שלנו צריך להרגיש. התוצאה היא יחידה שאי אפשר לדמיין את הסלון בלעדיה.</p>
