@@ -11,6 +11,23 @@
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
   document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
+  // Reveal items inside a horizontal carousel as a group when the carousel
+  // itself enters viewport — otherwise off-screen cards never intersect and
+  // stay at opacity:0, which on iOS shows as cards "appearing/disappearing"
+  // while the arrows scroll them in.
+  document.querySelectorAll('[data-carousel]').forEach((carousel) => {
+    const items = carousel.querySelectorAll('.reveal');
+    if (!items.length) return;
+    const groupIO = new IntersectionObserver((entries, observer) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        items.forEach((el) => { el.classList.add('in'); io.unobserve(el); });
+        observer.unobserve(e.target);
+      }
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    groupIO.observe(carousel);
+  });
+
   // ---- count-up ----
   const ease = (t) => 1 - Math.pow(1 - t, 3);
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -155,12 +172,40 @@
     const forwardSign = isRTL ? -1 : 1;
     const step = () => Math.max(120, scrollEl.clientWidth * stepFraction);
 
-    nextBtn.addEventListener('click', () => {
-      scrollEl.scrollBy({ left: forwardSign * step(), behavior: 'smooth' });
-    });
-    prevBtn.addEventListener('click', () => {
-      scrollEl.scrollBy({ left: -forwardSign * step(), behavior: 'smooth' });
-    });
+    // iOS Safari fights snap-mandatory containers when scrollBy({smooth}) is
+    // used — the snap yanks the scroll mid-flight, producing the
+    // jump/glitch the user can reproduce on testimonials. Disable snap for
+    // the duration of the programmatic scroll, then restore it on settle.
+    const isIOS = /iP(hone|ad|od)/.test(navigator.platform) ||
+      (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+    let restoreTimer = null;
+    const scrollOneStep = (dx) => {
+      if (!isIOS) {
+        scrollEl.scrollBy({ left: dx, behavior: 'smooth' });
+        return;
+      }
+      const snapInline = scrollEl.style.scrollSnapType;
+      scrollEl.style.scrollSnapType = 'none';
+      scrollEl.scrollBy({ left: dx, behavior: 'smooth' });
+      let lastLeft = scrollEl.scrollLeft;
+      let idle = 0;
+      const onScroll = () => {
+        if (scrollEl.scrollLeft !== lastLeft) { idle = 0; lastLeft = scrollEl.scrollLeft; }
+      };
+      scrollEl.addEventListener('scroll', onScroll, { passive: true });
+      clearInterval(restoreTimer);
+      restoreTimer = setInterval(() => {
+        idle += 1;
+        if (idle >= 4) { // ~4 * 80ms = ~320ms of no movement
+          clearInterval(restoreTimer);
+          scrollEl.removeEventListener('scroll', onScroll);
+          scrollEl.style.scrollSnapType = snapInline;
+        }
+      }, 80);
+    };
+
+    nextBtn.addEventListener('click', () => scrollOneStep(forwardSign * step()));
+    prevBtn.addEventListener('click', () => scrollOneStep(-forwardSign * step()));
 
     const update = () => {
       const max = scrollEl.scrollWidth - scrollEl.clientWidth;
