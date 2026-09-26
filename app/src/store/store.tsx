@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react'
-import { initialState, makeSampleJob, makeSnapshot, uid } from '../model/presets'
+import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
+import { DEFAULT_SETTINGS, defaultQuote, initialState, makeSampleJob, makeSnapshot, uid } from '../model/presets'
 import type { AppState, Hardware, Job, JobStatus, Material, RevisionTrigger, WorkshopSettings } from '../model/types'
 
 const STORAGE_KEY = 'qtb.state.v1'
@@ -19,6 +19,10 @@ export type Action =
   | { type: 'job/status'; id: string; status: JobStatus; event?: string }
   | { type: 'job/lock'; id: string }
   | { type: 'job/openProductionChange'; id: string }
+  | { type: 'job/sendQuote'; id: string }
+  | { type: 'job/portalViewed'; id: string }
+  | { type: 'job/approve'; id: string; optionId?: string }
+  | { type: 'job/changeRequest'; id: string; text: string }
   | { type: 'state/replace'; state: AppState }
   | { type: 'state/reset' }
 
@@ -89,11 +93,50 @@ export function reducer(s: AppState, a: Action): AppState {
       }
     case 'job/openProductionChange':
       return { ...s, jobs: s.jobs.map((j) => (j.id === a.id ? touch({ ...j, productionChangePending: true }, 'Job נפתח לשינוי אחרי נעילה') : j)) }
+    case 'job/sendQuote':
+      return {
+        ...s,
+        jobs: s.jobs.map((j) => {
+          if (j.id !== a.id) return j
+          const last = j.revisions.at(-1)
+          const same = last && JSON.stringify([last.units, last.extras, last.quotedPrice]) === JSON.stringify([j.units, j.extras, j.quotedPrice])
+          const rev = same ? last : makeSnapshot(j, s, (last?.version ?? 0) + 1, 'manual', 'הצעה נשלחה')
+          const revisions = same ? j.revisions : [...j.revisions, rev]
+          return touch({ ...j, revisions, status: j.status === 'draft' ? 'quoted' : j.status, quote: { ...j.quote, sentAt: now(), sentRevisionId: rev.id, viewedAt: undefined } }, `הצעה V${rev.version} נשלחה ללקוח`)
+        }),
+      }
+    case 'job/portalViewed':
+      return { ...s, jobs: s.jobs.map((j) => (j.id === a.id && j.quote.sentAt && !j.quote.viewedAt ? touch({ ...j, quote: { ...j.quote, viewedAt: now() } }, 'הלקוח פתח את ההצעה') : j)) }
+    case 'job/approve':
+      return {
+        ...s,
+        jobs: s.jobs.map((j) => {
+          if (j.id !== a.id) return j
+          const opt = j.quote.options.find((o) => o.id === a.optionId)
+          const units = opt ? j.units.map((u) => (u.kind === 'parametric' ? { ...u, doorMaterialId: opt.doorMaterialId ?? u.doorMaterialId, carcassMaterialId: opt.carcassMaterialId ?? u.carcassMaterialId } : u)) : j.units
+          return touch({ ...j, units, status: 'approved', quote: { ...j.quote, approvedAt: now(), approvedOptionId: a.optionId } }, opt ? `הלקוח אישר את ההצעה — אופציה "${opt.name}"` : 'הלקוח אישר את ההצעה')
+        }),
+      }
+    case 'job/changeRequest':
+      return { ...s, jobs: s.jobs.map((j) => (j.id === a.id ? touch({ ...j, quote: { ...j.quote, changeRequests: [...j.quote.changeRequests, { at: now(), text: a.text }] } }, `הלקוח ביקש שינוי: ${a.text.slice(0, 60)}`) : j)) }
     case 'state/replace':
-      return a.state
+      return normalize(a.state)
     case 'state/reset':
       return initialState()
   }
+}
+
+/** Fill fields added after a state was first saved. */
+export function normalize(parsed: AppState): AppState {
+  const settings: WorkshopSettings = { ...DEFAULT_SETTINGS, ...parsed.settings, quote: { ...DEFAULT_SETTINGS.quote, ...(parsed.settings.quote ?? {}) }, labor: { ...DEFAULT_SETTINGS.labor, ...(parsed.settings.labor ?? {}) }, defaults: { ...DEFAULT_SETTINGS.defaults, ...(parsed.settings.defaults ?? {}) } }
+  const jobs = parsed.jobs.map((j) => ({
+    ...j,
+    intakeText: j.intakeText ?? '',
+    attachments: j.attachments ?? [],
+    measurements: j.measurements ?? [],
+    quote: j.quote ? { ...defaultQuote(settings, j.units.map((u) => u.id)), ...j.quote } : defaultQuote(settings, j.units.map((u) => u.id)),
+  }))
+  return { ...parsed, settings, jobs }
 }
 
 function load(): AppState {
@@ -101,20 +144,21 @@ function load(): AppState {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as AppState
-      if (parsed && Array.isArray(parsed.jobs) && parsed.settings) return parsed
+      if (parsed && Array.isArray(parsed.jobs) && parsed.settings) return normalize(parsed)
     }
   } catch { /* fall through */ }
   return initialState()
 }
 
-const Ctx = createContext<{ state: AppState; dispatch: (a: Action) => void } | null>(null)
+const Ctx = createContext<{ state: AppState; dispatch: (a: Action) => void; storageOk: boolean } | null>(null)
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, load)
+  const [storageOk, setStorageOk] = useState(true)
   useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)) } catch { /* quota / private mode */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); setStorageOk(true) } catch { setStorageOk(false) }
   }, [state])
-  const value = useMemo(() => ({ state, dispatch }), [state])
+  const value = useMemo(() => ({ state, dispatch, storageOk }), [state, storageOk])
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
 
@@ -129,12 +173,13 @@ export function useJob(id: string | undefined): Job | undefined {
   return state.jobs.find((j) => j.id === id)
 }
 
-export function newJob(number: number, customer: Job['customer'], projectType: Job['projectType']): Job {
+export function newJob(number: number, customer: Job['customer'], projectType: Job['projectType'], settings: WorkshopSettings): Job {
   const t = now()
   return {
     id: uid(), number, customer, projectType, status: 'draft', units: [],
     extras: { installationHours: 0, installationFlat: 0, transport: 0, subcontractors: [], risk: null },
     quotedPrice: null, revisions: [], productionChangePending: false,
+    intakeText: '', attachments: [], measurements: [], quote: defaultQuote(settings),
     events: [{ at: t, text: 'Job נוצר' }], createdAt: t, updatedAt: t,
   }
 }

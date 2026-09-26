@@ -1,4 +1,12 @@
-import type { AppState, Hardware, Job, Material, ParametricUnit, Revision, WorkshopSettings } from './types'
+import type { AppState, Hardware, Job, Material, ParametricUnit, QuoteConfig, Revision, WorkshopSettings } from './types'
+
+export function defaultQuote(s: WorkshopSettings, unitIds: string[] = []): QuoteConfig {
+  return {
+    includedUnitIds: unitIds, unitDescriptions: {}, intro: '',
+    inclusions: s.quote.inclusions, exclusions: s.quote.exclusions, paymentSchedule: s.quote.paymentSchedule,
+    validityDays: s.quote.validityDays, timelineWeeks: s.quote.timelineWeeks, options: [], changeRequests: [],
+  }
+}
 
 const TODAY = new Date().toISOString()
 
@@ -45,6 +53,14 @@ export const DEFAULT_SETTINGS: WorkshopSettings = {
     handleId: 'h-handle-basic',
     shelfSupportId: 'h-shelf-pin',
     rodId: 'h-rod',
+  },
+  quote: {
+    phone: '', email: '', address: '',
+    inclusions: 'ייצור והרכבה בנגרייה, הובלה והתקנה בכתובת הלקוח, פרזול כמפורט.',
+    exclusions: 'עבודות חשמל ואינסטלציה, פירוק ריהוט קיים, תיקוני קיר וצבע.',
+    paymentSchedule: '40% מקדמה בהזמנה · 50% לפני התקנה · 10% בסיום',
+    validityDays: 14,
+    timelineWeeks: 4,
   },
   onboarded: false,
 }
@@ -96,6 +112,8 @@ export function makeSampleJob(state: Pick<AppState, 'materials' | 'hardware' | '
     extras: { installationHours: 4, installationFlat: 0, transport: 300, subcontractors: [], risk: null },
     quotedPrice: null,
     revisions: [], productionChangePending: false,
+    intakeText: 'היי, אני צריכה ארון לחדר שינה, 2.4 מטר רוחב, גובה עד התקרה בערך 2.6, ארבע דלתות, לבן, עם כמה מגירות. מצרפת תמונה של הקיר.',
+    attachments: [], measurements: [], quote: defaultQuote(state.settings, [unit.id]),
     events: [{ at: now, text: 'Job לדוגמה נוצר — אפשר למחוק' }],
     createdAt: now, updatedAt: now,
   }

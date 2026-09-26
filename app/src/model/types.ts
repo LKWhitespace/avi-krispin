@@ -94,7 +94,21 @@ export interface WorkshopSettings {
     shelfSupportId: string
     rodId: string
   }
+  quote: QuoteDefaults
   onboarded: boolean
+}
+
+export interface QuoteDefaults {
+  phone: string
+  email: string
+  address: string
+  /** data URL */
+  logo?: string
+  inclusions: string
+  exclusions: string
+  paymentSchedule: string
+  validityDays: number
+  timelineWeeks: number
 }
 
 // ---------- Units ----------
@@ -200,6 +214,65 @@ export interface Revision {
   locked: boolean
 }
 
+export interface Attachment {
+  id: string
+  name: string
+  /** data URL, downscaled */
+  dataUrl: string
+  addedAt: string
+}
+
+export type MeasurementLabel = 'wall_width' | 'height' | 'depth' | 'socket' | 'pipe' | 'skirting' | 'window' | 'ac' | 'floor_dev' | 'custom'
+
+export interface Measurement {
+  id: string
+  label: MeasurementLabel
+  customLabel?: string
+  /** mm */
+  value: number
+  note?: string
+  /** attachment id */
+  photoId?: string
+  /** normalized 0..1 line on the photo */
+  line?: { x1: number; y1: number; x2: number; y2: number }
+  at: string
+  linkedTo?: { unitId: string; dim: 'width' | 'height' | 'depth' }
+}
+
+export interface QuoteOption {
+  id: string
+  name: string
+  /** applied to all parametric units */
+  doorMaterialId?: string
+  carcassMaterialId?: string
+  /** free text shown to client */
+  description?: string
+}
+
+export interface ChangeRequest {
+  at: string
+  text: string
+}
+
+export interface QuoteConfig {
+  includedUnitIds: string[]
+  unitDescriptions: Record<string, string>
+  intro: string
+  inclusions: string
+  exclusions: string
+  paymentSchedule: string
+  validityDays: number
+  timelineWeeks: number
+  options: QuoteOption[]
+  /** set when sent */
+  sentAt?: string
+  sentRevisionId?: string
+  viewedAt?: string
+  approvedAt?: string
+  approvedOptionId?: string
+  changeRequests: ChangeRequest[]
+}
+
 export interface JobEvent {
   at: string
   text: string
@@ -217,6 +290,10 @@ export interface Job {
   revisions: Revision[]
   /** locked job was opened for a production change; next revision is a production revision */
   productionChangePending: boolean
+  intakeText: string
+  attachments: Attachment[]
+  measurements: Measurement[]
+  quote: QuoteConfig
   events: JobEvent[]
   createdAt: string
   updatedAt: string

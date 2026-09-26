@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { AppState, WorkshopSettings } from '../model/types'
 import { exportState, useStore } from '../store/store'
 import { Card, Field, NumInput, PctInput } from '../ui/components'
+import { fileToDataUrl } from '../ui/image'
 
 export function SettingsPage() {
   const { state, dispatch } = useStore()
@@ -12,6 +13,7 @@ export function SettingsPage() {
   const set = (patch: Partial<WorkshopSettings>) => dispatch({ type: 'settings/update', patch })
   const setLabor = (patch: Partial<WorkshopSettings['labor']>) => set({ labor: { ...s.labor, ...patch } })
   const setDef = (patch: Partial<WorkshopSettings['defaults']>) => set({ defaults: { ...s.defaults, ...patch } })
+  const setQ = (patch: Partial<WorkshopSettings['quote']>) => set({ quote: { ...s.quote, ...patch } })
   const mats = (thin: boolean) => state.materials.filter((m) => (thin ? m.thickness <= 10 : m.thickness > 10))
   const hw = (cat: string) => state.hardware.filter((h) => h.category === cat)
 
@@ -72,6 +74,28 @@ export function SettingsPage() {
             <Field label="ידית"><select value={s.defaults.handleId} onChange={(e) => setDef({ handleId: e.target.value })}>{hw('handle').map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select></Field>
             <Field label="תומך מדף"><select value={s.defaults.shelfSupportId} onChange={(e) => setDef({ shelfSupportId: e.target.value })}>{hw('shelf_support').map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select></Field>
             <Field label="מוט תלייה"><select value={s.defaults.rodId} onChange={(e) => setDef({ rodId: e.target.value })}>{hw('rod').map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select></Field>
+          </div>
+        </Card>
+
+        <Card title="4 · הצעת מחיר — מיתוג וברירות מחדל">
+          <div className="stack">
+            <div className="inline">
+              <Field label="טלפון"><input value={s.quote.phone} onChange={(e) => setQ({ phone: e.target.value })} /></Field>
+              <Field label="אימייל"><input value={s.quote.email} onChange={(e) => setQ({ email: e.target.value })} /></Field>
+              <Field label="כתובת"><input value={s.quote.address} onChange={(e) => setQ({ address: e.target.value })} /></Field>
+            </div>
+            <div className="row">
+              {s.quote.logo && <img src={s.quote.logo} alt="logo" style={{ height: 48, borderRadius: 6 }} />}
+              <label className="btn sm">{s.quote.logo ? 'החלף לוגו' : '+ לוגו'}<input type="file" accept="image/*" hidden onChange={async (e) => { const f = e.target.files?.[0]; if (f) setQ({ logo: await fileToDataUrl(f, 400, 0.85) }) }} /></label>
+              {s.quote.logo && <button className="btn sm ghost" onClick={() => setQ({ logo: undefined })}>הסר</button>}
+            </div>
+            <Field label="כלול (ברירת מחדל)"><textarea rows={2} value={s.quote.inclusions} onChange={(e) => setQ({ inclusions: e.target.value })} /></Field>
+            <Field label="לא כלול (ברירת מחדל)"><textarea rows={2} value={s.quote.exclusions} onChange={(e) => setQ({ exclusions: e.target.value })} /></Field>
+            <div className="inline">
+              <Field label="תנאי תשלום"><input value={s.quote.paymentSchedule} onChange={(e) => setQ({ paymentSchedule: e.target.value })} /></Field>
+              <Field label="תוקף ההצעה" suffix="ימים"><NumInput value={s.quote.validityDays} min={1} onChange={(v) => setQ({ validityDays: v ?? 14 })} /></Field>
+              <Field label="זמן אספקה" suffix="שבועות"><NumInput value={s.quote.timelineWeeks} min={1} onChange={(v) => setQ({ timelineWeeks: v ?? 4 })} /></Field>
+            </div>
           </div>
         </Card>
 

@@ -1,8 +1,11 @@
 # Quote-to-Build — MVP 1 core loop
 
-Frontend-only build of the core loop from `docs/prd-quote-to-build.md`:
-Settings · Library · Jobs · Unit Builder · Pricing · Revisions & Change Impact.
+Frontend-only build of MVP 1 from `docs/prd-quote-to-build.md`, all eleven screens:
+Jobs · Job Overview · Intake · Measurements · Unit Builder · Pricing · Library · Quote Builder ·
+Revisions & Change Impact · Client Portal · Workshop Settings.
 No backend. State lives in the browser's localStorage, with JSON export/import in Settings.
+Photos are downscaled before storage; the client portal link therefore only works in the same
+browser. To send a quote to a real client today: open as client, print to PDF, send on WhatsApp.
 
 ```bash
 cd app
@@ -21,10 +24,12 @@ npm run build      # static output in dist/
 | `src/engine/parametric.ts` | Parts derivation from W/H/D + bays + doors; hardware rules |
 | `src/engine/pricing.ts` | Sheets, edge banding, labor, overhead, risk, recommended price, margin, warnings |
 | `src/engine/impact.ts` | Change impact between two snapshots |
+| `src/engine/quote.ts` | Quote options priced at the job's margin; portal always prices the sent revision's snapshot |
+| `src/ui/image.ts` | Downscale photos to JPEG data URLs for localStorage |
 | `src/store/store.tsx` | Reducer + localStorage persistence, revision & production-lock actions |
-| `src/pages/*` | Screens S1, S2, S5, S6, S7, S9, S11 from the PRD |
+| `src/pages/*` | One file per PRD screen; `PortalPage` renders outside the app shell at `#/q/:jobId` |
 
-## Not in this build (next pass)
+## Not in this build (MVP 2+)
 
-Intake draft (S3), Measurements (S4), Quote Builder (S8), Client Portal (S10), BOM, cut list.
-The tabs exist but are disabled.
+BOM, procurement, cut list, production board, AI parsing of intake text, WhatsApp integration,
+a server so portal links work across devices.

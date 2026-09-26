@@ -56,12 +56,12 @@ export function JobLayout() {
 
       <nav className="tabs">
         <NavLink to="" end>Overview</NavLink>
+        <NavLink to="intake">Intake</NavLink>
+        <NavLink to="measurements">Measurements{job.measurements.length > 0 && <span className="faint"> {job.measurements.length}</span>}</NavLink>
         <NavLink to="units">Units</NavLink>
         <NavLink to="pricing">Pricing</NavLink>
+        <NavLink to="quote">Quote{job.quote.changeRequests.length > 0 && job.quote.sentAt && job.quote.changeRequests.at(-1)!.at > job.quote.sentAt && <Badge tone="warn">שינוי</Badge>}</NavLink>
         <NavLink to="revisions">Revisions</NavLink>
-        <a className="disabled" title="בגרסה הבאה">Intake</a>
-        <a className="disabled" title="בגרסה הבאה">Measurements</a>
-        <a className="disabled" title="בגרסה הבאה">Quote</a>
       </nav>
 
       <Outlet context={ctx} />

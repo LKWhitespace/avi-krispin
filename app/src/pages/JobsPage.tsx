@@ -14,7 +14,10 @@ export function nextAction(j: Job): string {
   const missing = j.units.some((u) => u.kind !== 'freeform' && (u.width.value == null || u.height.value == null || (u.kind === 'parametric' && u.depth.value == null)))
   if (missing) return 'השלם מידות חסרות'
   if (j.quotedPrice == null) return 'קבע מחיר להצעה'
-  if (j.status === 'draft') return 'שמור גרסה ושלח הצעה'
+  if (j.quote.changeRequests.length > 0 && (!j.quote.sentAt || j.quote.changeRequests.at(-1)!.at > j.quote.sentAt)) return 'הלקוח ביקש שינוי — עדכן ושלח שוב'
+  if (!j.quote.sentAt) return 'שלח הצעה ללקוח'
+  const last = j.revisions.at(-1)
+  if (last && j.quote.sentRevisionId !== last.id) return 'יש גרסה חדשה — שלח הצעה מעודכנת'
   return 'ממתין ללקוח'
 }
 
@@ -29,10 +32,10 @@ export function JobsPage() {
   const jobs = useMemo(() => state.jobs.filter((j) => (filter === 'all' || j.status === filter) && (q === '' || `${j.customer.name} ${j.customer.address} ${j.number}`.includes(q))), [state.jobs, filter, q])
 
   const create = () => {
-    const job = newJob(state.nextJobNumber, { name: form.name || 'לקוח חדש', phone: form.phone, address: form.address }, form.projectType)
+    const job = newJob(state.nextJobNumber, { name: form.name || 'לקוח חדש', phone: form.phone, address: form.address }, form.projectType, state.settings)
     dispatch({ type: 'job/create', job })
     setCreating(false)
-    nav(`/jobs/${job.id}/units`)
+    nav(`/jobs/${job.id}/intake`)
   }
 
   return (
