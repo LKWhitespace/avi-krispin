@@ -28,19 +28,20 @@ export function PortalPage() {
   const approved = !!q.approvedAt
   const units = rev.units.filter((u) => q.includedUnitIds.includes(u.id))
   const mats = Object.values(rev.materials)
-  const optionRows = [{ id: undefined as string | undefined, name: q.options.length > 0 ? 'אופציה A' : 'הצעה', description: '', price: priced.base.price }, ...priced.options.map((p) => ({ id: p.option!.id, name: p.option!.name, description: p.option!.description ?? '', price: p.price }))]
+  const optionRows = [{ id: undefined as string | undefined, name: q.options.length > 0 ? 'אפשרות א׳' : 'הצעה', description: '', price: priced.base.price }, ...priced.options.map((p) => ({ id: p.option!.id, name: p.option!.name, description: p.option!.description ?? '', price: p.price }))]
   const selected = optionRows.find((o) => o.id === chosen) ?? optionRows[0]
   const withVat = (n: number) => n * (1 + s.vat)
 
   return (
     <div className="portal">
       <style>{`
-        .portal { max-width: 760px; margin: 0 auto; padding: 1.2rem 1rem 4rem; }
-        .portal header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: 1rem; border-bottom: 2px solid var(--accent); margin-bottom: 1.2rem; }
+        .portal { max-width: 780px; margin: 1.5rem auto; padding: 2rem 1.6rem 3rem; background: var(--surface); border-radius: 18px; box-shadow: var(--sh-lg); }
+        @media (max-width: 600px) { .portal { margin: 0; border-radius: 0; padding: 1.2rem 1rem 3rem; } }
+        .portal header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: 1rem; border-bottom: 3px solid var(--wood); margin-bottom: 1.4rem; }
         .portal .unit { display: grid; grid-template-columns: 1fr auto; gap: .6rem; padding: .8rem 0; border-bottom: 1px solid var(--line); }
         .portal .opt { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .8rem 1rem; border: 2px solid var(--line); border-radius: 12px; cursor: pointer; margin-bottom: .5rem; background: var(--surface); }
-        .portal .opt.on { border-color: var(--accent); }
-        .portal .total { display: flex; justify-content: space-between; align-items: baseline; font-size: 1.35rem; font-weight: 700; margin-top: 1rem; padding-top: .8rem; border-top: 2px solid var(--line); }
+        .portal .opt.on { border-color: var(--wood); background: var(--wood-soft); }
+        .portal .total { display: flex; justify-content: space-between; align-items: baseline; font-size: 1.6rem; font-weight: 900; margin-top: 1.2rem; padding-top: 1rem; border-top: 2px solid var(--line-2); letter-spacing: -.01em; }
         .portal .actions { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.4rem; }
         .portal .actions .btn { padding: .8rem 1.4rem; font-size: 1.05rem; }
         .portal h2 { font-size: 1rem; color: var(--ink-2); margin: 1.2rem 0 .4rem; }
@@ -48,7 +49,7 @@ export function PortalPage() {
       `}</style>
       <header>
         <div>
-          <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>{s.businessName || 'הצעת מחיר'}</div>
+          <div style={{ fontWeight: 800, fontSize: '1.3rem' }}>{s.businessName || 'הצעת מחיר'}</div>
           <div className="faint">{[s.quote.phone, s.quote.email, s.quote.address].filter(Boolean).join(' · ')}</div>
         </div>
         {s.quote.logo && <img src={s.quote.logo} alt="" style={{ height: 52 }} />}
@@ -57,7 +58,7 @@ export function PortalPage() {
       <div className="row between">
         <div>
           <h1 style={{ marginBottom: 0 }}>הצעת מחיר · {job.customer.name}</h1>
-          <div className="muted">#{job.number} · גרסה V{rev.version} · {new Date(sentAt).toLocaleDateString('he-IL')} · בתוקף {q.validityDays} ימים</div>
+          <div className="muted">עבודה <span className="num">{job.number}</span> · גרסה {rev.version} · {new Date(sentAt).toLocaleDateString('he-IL')} · בתוקף {q.validityDays} ימים</div>
         </div>
         <div className="noprint">{approved ? <span className="badge ok">אושר</span> : expired ? <span className="badge bad">פג תוקף</span> : null}</div>
       </div>
@@ -102,12 +103,12 @@ export function PortalPage() {
 
       {!approved && !thanks && (
         <div className="actions">
-          <button className="btn primary" disabled={expired} onClick={() => { dispatch({ type: 'job/approve', id: job.id, optionId: selected.id }); setThanks('approved') }}>אישור ההצעה{optionRows.length > 1 ? ` · ${selected.name}` : ''}</button>
-          <button className="btn" onClick={() => setAsking(true)}>בקשת שינוי</button>
-          <button className="btn ghost" onClick={() => window.print()}>הדפסה / PDF</button>
+          <button className="btn primary lg" disabled={expired} onClick={() => { dispatch({ type: 'job/approve', id: job.id, optionId: selected.id }); setThanks('approved') }}>אישור ההצעה{optionRows.length > 1 ? ` · ${selected.name}` : ''}</button>
+          <button className="btn lg" onClick={() => setAsking(true)}>בקשת שינוי</button>
+          <button className="btn ghost" onClick={() => window.print()}>הדפסה או PDF</button>
         </div>
       )}
-      {(approved || thanks) && <div className="actions"><button className="btn ghost" onClick={() => window.print()}>הדפסה / PDF</button></div>}
+      {(approved || thanks) && <div className="actions"><button className="btn ghost" onClick={() => window.print()}>הדפסה או PDF</button></div>}
       {expired && !approved && <p className="faint noprint">ההצעה פגה. פנה אלינו לקבלת הצעה מעודכנת.</p>}
 
       {asking && (
@@ -122,7 +123,7 @@ export function PortalPage() {
           </div>
         </div>
       )}
-      <p className="faint noprint" style={{ marginTop: '2rem' }}>הצעה זו נוצרה ב־Quote-to-Build{state.settings.businessName ? ` עבור ${state.settings.businessName}` : ''}.</p>
+      <p className="faint noprint" style={{ marginTop: '2.5rem' }}>הצעה זו הופקה במערכת "מהצעה לייצור"{state.settings.businessName ? ` של ${state.settings.businessName}` : ''}.</p>
     </div>
   )
 }

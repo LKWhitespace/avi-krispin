@@ -39,12 +39,12 @@ export function MeasurementsTab() {
   return (
     <div className="stack">
       <div className="row between">
-        <h2 style={{ margin: 0 }}>Measurements <span className="faint">{job.measurements.length}</span></h2>
+        <h2>מדידות <span className="faint num">{job.measurements.length}</span></h2>
         <button className="btn primary" onClick={() => guard() && setAdding(true)}>+ מידה</button>
       </div>
-      <div className="callout info small">מידה שנמדדה בשטח וקושרה ליחידה דורסת את מה שהלקוח שלח ומעלה את הביטחון ל־"נמדד". נעילה לייצור דורשת שכל מידות היחידות הפרמטריות יהיו "נמדד" או "מאומת".</div>
+      <div className="callout info small">מידה שנמדדה בשטח וקושרה ליחידה דורסת את מה שהלקוח שלח ומעלה את הביטחון ל"נמדד בשטח". נעילה לייצור דורשת שכל מידות היחידות הפרמטריות יהיו "נמדד בשטח" או "מאומת".</div>
 
-      {job.measurements.length === 0 && !adding && <div className="empty card"><h2>אין מידות</h2><p>בבית הלקוח: צלם קיר, סמן קו, הקלד מ״מ. או הקלדה מהירה בלי תמונה.</p></div>}
+      {job.measurements.length === 0 && !adding && <div className="empty card"><div className="art">📐</div><h2>אין מידות</h2><p>בבית הלקוח: צלם קיר, סמן קו, הקלד מ״מ. או הקלדה מהירה בלי תמונה.</p></div>}
 
       <div className="grid cards">
         {job.measurements.map((m) => {

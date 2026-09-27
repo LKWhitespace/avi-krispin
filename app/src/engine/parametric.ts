@@ -98,7 +98,7 @@ export function deriveParts(
     doorWidth = u.doors.type === 'sliding' ? W / doorCount + 30 : W / doorCount - 3
     doorHeight = H - 3
     push({ role: 'door', label: 'דלת', qty: doorCount, materialId: u.doorMaterialId, w: doorWidth, h: doorHeight, edgeM: edge ? 2 * mm(doorWidth + doorHeight) : 0 })
-    if (u.doors.type === 'hinged' && doorWidth > 600) warnings.push(`רוחב דלת ${Math.round(doorWidth)} מ״מ — מעל 600. שקול ${doorCount + 1} דלתות.`)
+    if (u.doors.type === 'hinged' && doorWidth > 600) warnings.push(`רוחב דלת ${Math.round(doorWidth)} מ״מ, מעל 600. שקול ${doorCount + 1} דלתות.`)
   }
 
   // sheet-fit check
@@ -108,7 +108,7 @@ export function deriveParts(
     const fits = (p.w <= m.sheetW && p.h <= m.sheetH) || (p.h <= m.sheetW && p.w <= m.sheetH)
     if (!fits) warnings.push(`${p.label} ${Math.round(p.w)}×${Math.round(p.h)} חורג מלוח ${m.name} (${m.sheetW}×${m.sheetH})`)
   }
-  if (bayWidth < 250) warnings.push(`רוחב תא ${Math.round(bayWidth)} מ״מ — צר מאוד.`)
+  if (bayWidth < 250) warnings.push(`רוחב תא ${Math.round(bayWidth)} מ״מ, צר מאוד.`)
 
   return { parts, bayWidth, doorWidth, doorHeight, shelves, drawers, hangingBays, warnings }
 }

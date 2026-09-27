@@ -19,20 +19,20 @@ export function LibraryPage() {
 
   return (
     <div className="stack">
-      <div className="row between">
-        <h1>Library</h1>
+      <div className="page-head">
+        <div><h1>ספרייה</h1><div className="lead">מחירי חומרים ופרזול. מקור האמת לכל תמחור.</div></div>
         <div className="row">
           <button className={`btn ${tab === 'materials' ? 'primary' : ''}`} onClick={() => setTab('materials')}>חומרים</button>
           <button className={`btn ${tab === 'hardware' ? 'primary' : ''}`} onClick={() => setTab('hardware')}>פרזול</button>
         </div>
       </div>
-      <div className="callout info small">מחירים עם סימון <Badge tone="warn">הערכה</Badge> הם presets. עדכון מחיר מסיר את הסימון ומאפס את "עודכן". שינוי מחיר לא משפיע על גרסאות שמורות, רק על מצב עבודה נוכחי.</div>
+      <div className="callout info small">מחירים עם סימון <Badge tone="warn">הערכה</Badge> הם ברירות מחדל שלא אומתו. עדכון המחיר מסיר את הסימון. שינוי מחיר לא משפיע על גרסאות שמורות, רק על מצב העבודה הנוכחי.</div>
 
       {tab === 'materials' ? (
         <Card title="חומרים" right={<button className="btn sm" onClick={() => dispatch({ type: 'material/upsert', material: { id: uid(), name: 'חומר חדש', type: 'melamine', thickness: 18, sheetW: 2800, sheetH: 2070, costPerSheet: 0, waste: 0.12, updatedAt: new Date().toISOString(), swatch: '#ddd' } })}>+ חומר</button>}>
           <div style={{ overflowX: 'auto' }}>
             <table>
-              <thead><tr><th></th><th>שם</th><th>סוג</th><th className="num">עובי</th><th className="num">לוח (מ״מ)</th><th className="num">₪ ללוח</th><th className="num">waste %</th><th>ספק</th><th>סטטוס</th><th className="num">בשימוש</th><th></th></tr></thead>
+              <thead><tr><th></th><th>שם</th><th>סוג</th><th className="num">עובי</th><th className="num">גודל לוח (מ״מ)</th><th className="num">₪ ללוח</th><th className="num">פחת %</th><th>ספק</th><th>מצב</th><th className="num">בעבודות</th><th></th></tr></thead>
               <tbody>
                 {state.materials.map((m) => (
                   <tr key={m.id}>
@@ -55,10 +55,10 @@ export function LibraryPage() {
         </Card>
       ) : (
         <Card title="פרזול" right={<button className="btn sm" onClick={() => dispatch({ type: 'hardware/upsert', hardware: { id: uid(), name: 'פריט חדש', category: 'other', costPerUnit: 0, rule: { per: 'unit', qty: 1 }, updatedAt: new Date().toISOString() } })}>+ פריט</button>}>
-          <div className="callout info small" style={{ marginBottom: '.6rem' }}>הפריטים שבפועל נכנסים ליחידה פרמטרית נבחרים ב־Settings → ברירות מחדל. צירים: כמות לדלת עולה לפי גובה הדלת (2/3/4/5), הכלל כאן הוא מינימום.</div>
+          <div className="callout info small" style={{ marginBottom: '.6rem' }}>הפריטים שנכנסים בפועל ליחידה פרמטרית נבחרים בהגדרות, בברירות המחדל. צירים: הכמות לדלת עולה לפי גובה הדלת (2, 3, 4 או 5), הכלל כאן הוא המינימום.</div>
           <div style={{ overflowX: 'auto' }}>
             <table>
-              <thead><tr><th>שם</th><th>קטגוריה</th><th className="num">₪ ליחידה</th><th>כלל</th><th className="num">כמות</th><th>ספק</th><th>סטטוס</th><th></th></tr></thead>
+              <thead><tr><th>שם</th><th>קטגוריה</th><th className="num">₪ ליחידה</th><th>כלל</th><th className="num">כמות</th><th>ספק</th><th>מצב</th><th></th></tr></thead>
               <tbody>
                 {state.hardware.map((h) => {
                   const inUse = Object.values(state.settings.defaults).includes(h.id)

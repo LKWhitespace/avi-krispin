@@ -72,7 +72,7 @@ function priceParametric(u: ParametricUnit, materials: Record<string, Material>,
   const d = deriveParts(u, materials, s)
   if (!d) {
     base.incomplete = true
-    base.warnings.push('חסרה מידה — היחידה לא מתומחרת')
+    base.warnings.push('חסרה מידה, היחידה לא מתומחרת')
     return base
   }
   base.derived = d
@@ -123,7 +123,7 @@ function priceArea(u: AreaUnit, materials: Record<string, Material>, s: Workshop
     sheets: [], hardwareNeeds: [], edgeMeters: 0, derived: null, warnings: [], incomplete: false,
   }
   const W = u.width.value, H = u.height.value
-  if (W == null || H == null) { base.incomplete = true; base.warnings.push('חסרה מידה — היחידה לא מתומחרת'); return base }
+  if (W == null || H == null) { base.incomplete = true; base.warnings.push('חסרה מידה, היחידה לא מתומחרת'); return base }
   const area = (W / 1000) * (H / 1000)
   const m = materials[u.materialId]
   if (!m) { base.warnings.push('חומר חסר בספרייה') }
@@ -204,19 +204,19 @@ export function priceJob(inp: PriceInput): Breakdown {
   }
 
   const warnings: string[] = []
-  if (s.overheadPerMonth <= 0) warnings.push('Overhead לא מוגדר — המחיר מחושב ללא הוצאות קבועות.')
-  if (margin != null && margin < s.targetMargin) warnings.push(`Margin ${(margin * 100).toFixed(0)}% מתחת ליעד ${(s.targetMargin * 100).toFixed(0)}%.`)
+  if (s.overheadPerMonth <= 0) warnings.push('הוצאות קבועות לא הוגדרו, המחיר מחושב בלעדיהן.')
+  if (margin != null && margin < s.targetMargin) warnings.push(`רווחיות ${(margin * 100).toFixed(0)}% מתחת ליעד ${(s.targetMargin * 100).toFixed(0)}%.`)
   const unverified = units.flatMap((u) => u.kind === 'freeform' ? [] : [u.width, u.height, ...(u.kind === 'parametric' ? [u.depth] : [])])
     .filter((d) => d.value != null && (d.source === 'estimated' || d.source === 'customer')).length
-  if (unverified > 0) warnings.push(`${unverified} מידות משוערות/מהלקוח — העלות עשויה להשתנות אחרי מדידה.`)
+  if (unverified > 0) warnings.push(`${unverified} מידות הן הערכה או מהלקוח, העלות עשויה להשתנות אחרי מדידה.`)
   const staleMs = 1000 * 60 * 60 * 24 * 30 * 6
   const now = Date.now()
   const usedMats = new Set(ucs.flatMap((c) => c.sheets.map((x) => x.materialId)))
   for (const mid of usedMats) {
     const m = inp.materials[mid]
     if (!m) continue
-    if (m.approx) warnings.push(`מחיר ${m.name} הוא הערכה (preset) — עדכן בספרייה.`)
-    else if (now - Date.parse(m.updatedAt) > staleMs) warnings.push(`מחיר ${m.name} עודכן לפני יותר מ־6 חודשים.`)
+    if (m.approx) warnings.push(`מחיר ${m.name} הוא הערכה, עדכן אותו בספרייה.`)
+    else if (now - Date.parse(m.updatedAt) > staleMs) warnings.push(`מחיר ${m.name} עודכן לפני יותר משישה חודשים.`)
   }
   for (const c of ucs) for (const w of c.warnings) warnings.push(`${c.name}: ${w}`)
 

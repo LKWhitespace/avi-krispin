@@ -7,14 +7,16 @@ export const pct = (n: number | null | undefined): string => (n == null ? '—' 
 export const fmt = (n: number | null | undefined): string => (n == null ? '—' : num.format(n))
 export const signed = (n: number): string => (n > 0 ? `+${num.format(n)}` : num.format(n))
 export const dateShort = (iso: string): string => new Date(iso).toLocaleDateString('he-IL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+export const ver = (n: number | undefined | null): string => (n == null ? '' : `גרסה ${n}`)
 
 export const STATUS_LABEL: Record<string, string> = {
-  draft: 'טיוטה', quoted: 'הצעה נשלחה', approved: 'אושר', locked: 'נעול לייצור', lost: 'לא נסגר',
+  draft: 'טיוטה', quoted: 'הצעה נשלחה', approved: 'אושר', locked: 'בייצור', lost: 'לא נסגר',
 }
 export const PROJECT_LABEL: Record<string, string> = {
   kitchen: 'מטבח', wardrobe: 'ארון', furniture: 'ריהוט', cladding: 'חיפוי קיר', refurbishment: 'שיקום', other: 'אחר',
 }
 export const SOURCE_LABEL: Record<string, string> = {
-  estimated: 'הערכה', customer: 'לקוח', plan: 'תוכנית', site: 'נמדד', verified: 'מאומת',
+  estimated: 'הערכה', customer: 'מהלקוח', plan: 'מתוכנית', site: 'נמדד בשטח', verified: 'מאומת',
 }
 export const BAY_LABEL: Record<string, string> = { shelves: 'מדפים', hanging: 'תלייה', drawers: 'מגירות', empty: 'ריק' }
+export const KIND_LABEL: Record<string, string> = { parametric: 'פרמטרי', area: 'לפי שטח', freeform: 'חופשי' }

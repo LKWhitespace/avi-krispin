@@ -5,7 +5,7 @@ import { uid } from '../model/presets'
 import type { QuoteOption } from '../model/types'
 import { useStore } from '../store/store'
 import { Badge, Card, Field, NumInput } from '../ui/components'
-import { dateShort, money, pct } from '../ui/format'
+import { dateShort, money, pct, ver } from '../ui/format'
 import type { JobCtx } from './JobLayout'
 
 export function QuoteTab() {
@@ -36,15 +36,15 @@ export function QuoteTab() {
             <div className="row" style={{ marginTop: '.5rem' }}><Link className="btn sm" to="../units">עדכן יחידות</Link><Link className="btn sm" to="../pricing">עדכן מחיר</Link></div>
           </div>
         )}
-        <Card title="Scope — מה נכנס להצעה">
-          {job.units.length === 0 ? <p className="muted">אין יחידות. <Link to="../units">הוסף יחידות</Link>.</p> : (
+        <Card title="היקף העבודה, מה נכנס להצעה">
+          {job.units.length === 0 ? <p className="muted">אין יחידות. <Link to="../units" style={{ color: 'var(--wood)', fontWeight: 600 }}>הוסף יחידות</Link>.</p> : (
             <div className="stack">
               {job.units.map((u) => {
                 const on = q.includedUnitIds.includes(u.id)
                 return (
                   <div key={u.id} className="row" style={{ alignItems: 'flex-start' }}>
                     <label className="check" style={{ minWidth: 200 }}><input type="checkbox" checked={on} onChange={(e) => setQ({ includedUnitIds: e.target.checked ? [...q.includedUnitIds, u.id] : q.includedUnitIds.filter((x) => x !== u.id) })} /> <strong>{u.name}</strong>{u.qty > 1 && <span className="faint"> × {u.qty}</span>}</label>
-                    <input style={{ flex: 1, border: '1px solid var(--line)', borderRadius: 8, padding: '.4rem .6rem', background: 'var(--surface)' }} placeholder={autoDescription(u, state)} value={q.unitDescriptions[u.id] ?? ''} onChange={(e) => setQ({ unitDescriptions: { ...q.unitDescriptions, [u.id]: e.target.value } })} />
+                    <input className="input" style={{ flex: 1 }} placeholder={autoDescription(u, state)} value={q.unitDescriptions[u.id] ?? ''} onChange={(e) => setQ({ unitDescriptions: { ...q.unitDescriptions, [u.id]: e.target.value } })} />
                   </div>
                 )
               })}
@@ -53,19 +53,19 @@ export function QuoteTab() {
           )}
         </Card>
 
-        <Card title="Options — אותו Job, חומרים אחרים" right={<button className="btn sm" onClick={() => guard() && setQ({ options: [...q.options, { id: uid(), name: `אופציה ${String.fromCharCode(66 + q.options.length)}` }] })}>+ אופציה</button>}>
-          <p className="faint">אופציה A היא ההצעה הבסיסית. כל אופציה נוספת מחליפה חומר בכל היחידות הפרמטריות ומתומחרת באותו margin ({pct(priced.margin)}).</p>
+        <Card title="אפשרויות, אותה עבודה בחומרים אחרים" right={<button className="btn sm" onClick={() => guard() && setQ({ options: [...q.options, { id: uid(), name: `אפשרות ${'בגדה'[q.options.length] ?? q.options.length + 2}` }] })}>+ אפשרות</button>}>
+          <p className="faint">אפשרות א׳ היא ההצעה הבסיסית. כל אפשרות נוספת מחליפה חומר בכל היחידות הפרמטריות ומתומחרת באותה רווחיות ({pct(priced.margin)}).</p>
           {q.options.map((o, i) => {
             const p = priced.options[i]
             return (
               <div key={o.id} className="card flat" style={{ marginTop: '.6rem' }}>
                 <div className="inline">
                   <Field label="שם"><input value={o.name} onChange={(e) => setOpt(o.id, { name: e.target.value })} /></Field>
-                  <Field label="חומר דלתות/חזיתות"><select value={o.doorMaterialId ?? ''} onChange={(e) => setOpt(o.id, { doorMaterialId: e.target.value || undefined })}><option value="">כמו הבסיס</option>{thick.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}</select></Field>
+                  <Field label="חומר דלתות וחזיתות"><select value={o.doorMaterialId ?? ''} onChange={(e) => setOpt(o.id, { doorMaterialId: e.target.value || undefined })}><option value="">כמו הבסיס</option>{thick.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}</select></Field>
                   <Field label="חומר גוף"><select value={o.carcassMaterialId ?? ''} onChange={(e) => setOpt(o.id, { carcassMaterialId: e.target.value || undefined })}><option value="">כמו הבסיס</option>{thick.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}</select></Field>
                 </div>
                 <div className="row between" style={{ marginTop: '.5rem' }}>
-                  <input placeholder="תיאור ללקוח (אופציונלי)" value={o.description ?? ''} onChange={(e) => setOpt(o.id, { description: e.target.value })} style={{ flex: 1, border: '1px solid var(--line)', borderRadius: 8, padding: '.4rem .6rem', background: 'var(--surface)' }} />
+                  <input className="input" placeholder="תיאור ללקוח (לא חובה)" value={o.description ?? ''} onChange={(e) => setOpt(o.id, { description: e.target.value })} style={{ flex: 1 }} />
                   <strong className="num">{money(p.price)}</strong>
                   <button className="btn sm ghost danger" onClick={() => setQ({ options: q.options.filter((x) => x.id !== o.id) })}>×</button>
                 </div>
@@ -76,7 +76,7 @@ export function QuoteTab() {
 
         <Card title="תנאים">
           <div className="stack">
-            <Field label="פתיח (אופציונלי)"><textarea rows={2} value={q.intro} onChange={(e) => setQ({ intro: e.target.value })} placeholder="תודה על הפנייה. להלן הצעת מחיר ל…" /></Field>
+            <Field label="פתיח (לא חובה)"><textarea rows={2} value={q.intro} onChange={(e) => setQ({ intro: e.target.value })} placeholder="תודה על הפנייה. להלן הצעת מחיר ל…" /></Field>
             <Field label="כלול"><textarea rows={2} value={q.inclusions} onChange={(e) => setQ({ inclusions: e.target.value })} /></Field>
             <Field label="לא כלול"><textarea rows={2} value={q.exclusions} onChange={(e) => setQ({ exclusions: e.target.value })} /></Field>
             <div className="inline">
@@ -90,19 +90,19 @@ export function QuoteTab() {
 
       <div className="sticky stack">
         <Card title="סיכום">
-          <div className="row between"><span className="muted">אופציה A (בסיס)</span><strong className="num">{money(priced.base.price)}</strong></div>
+          <div className="row between"><span className="muted">{q.options.length > 0 ? 'אפשרות א׳ (בסיס)' : 'ההצעה'}</span><strong className="num">{money(priced.base.price)}</strong></div>
           {priced.options.map((p) => <div className="row between" key={p.option!.id}><span className="muted">{p.option!.name}</span><span className="num">{money(p.price)}</span></div>)}
           <div className="row between" style={{ marginTop: '.4rem' }}><span className="muted">מע״מ {pct(s.vat)}</span><span className="num">{money(priced.base.price * s.vat)}</span></div>
           <div className="row between"><span>סה״כ כולל מע״מ</span><strong className="num" style={{ fontSize: '1.2rem' }}>{money(priced.base.price * (1 + s.vat))}</strong></div>
-          <div className="row between small" style={{ marginTop: '.4rem' }}><span className="muted">margin</span><span>{pct(priced.margin)}</span></div>
-          {job.quotedPrice == null && <div className="callout warn small" style={{ marginTop: '.5rem' }}>לא נקבע מחיר ב־Pricing — ההצעה משתמשת במחיר המומלץ.</div>}
+          <div className="row between small" style={{ marginTop: '.4rem' }}><span className="muted">רווחיות</span><span className="num">{pct(priced.margin)}</span></div>
+          {job.quotedPrice == null && <div className="callout warn small" style={{ marginTop: '.5rem' }}>לא נקבע מחיר בתמחור, ההצעה משתמשת במחיר המומלץ.</div>}
         </Card>
 
         <Card title="שליחה">
           {q.sentAt ? (
             <div className="stack small">
               <div className="row between"><span className="muted">נשלחה</span><span className="num">{dateShort(q.sentAt)}</span></div>
-              <div className="row between"><span className="muted">גרסה</span><span>V{job.revisions.find((r) => r.id === q.sentRevisionId)?.version ?? '?'}</span></div>
+              <div className="row between"><span className="muted">גרסה</span><span>{ver(job.revisions.find((r) => r.id === q.sentRevisionId)?.version)}</span></div>
               <div className="row between"><span className="muted">הלקוח פתח</span><span>{q.viewedAt ? <span className="num">{dateShort(q.viewedAt)}</span> : <Badge>עדיין לא</Badge>}</span></div>
               {q.approvedAt && <div className="callout ok">אושר {dateShort(q.approvedAt)}{q.approvedOptionId && ` · ${q.options.find((o) => o.id === q.approvedOptionId)?.name}`}</div>}
               {quoteExpired(q) && !q.approvedAt && <Badge tone="bad">פג תוקף</Badge>}
@@ -115,8 +115,8 @@ export function QuoteTab() {
           </div>
           {q.sentAt && (
             <div style={{ marginTop: '.6rem' }}>
-              <div className="row"><input readOnly value={link} className="num" style={{ flex: 1, fontSize: '.75rem', border: '1px solid var(--line)', borderRadius: 8, padding: '.35rem .5rem', background: 'var(--surface-2)' }} /><button className="btn sm" onClick={() => { navigator.clipboard?.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 1500) }}>{copied ? 'הועתק' : 'העתק'}</button></div>
-              <p className="faint" style={{ marginTop: '.4rem' }}>בגרסה הזו הלינק עובד רק בדפדפן הזה (אין שרת). כדי לשלוח ללקוח: פתח כלקוח → הדפס ל־PDF → וואטסאפ.</p>
+              <div className="row nowrap"><input readOnly value={link} className="input num" style={{ flex: 1, fontSize: '.75rem', background: 'var(--surface-2)' }} /><button className="btn sm" onClick={() => { navigator.clipboard?.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 1500) }}>{copied ? 'הועתק' : 'העתק'}</button></div>
+              <p className="faint" style={{ marginTop: '.4rem' }}>בגרסה הזו הקישור עובד רק בדפדפן הזה, אין שרת. כדי לשלוח ללקוח: פתח כלקוח, הדפס לקובץ PDF, שלח בוואטסאפ.</p>
             </div>
           )}
         </Card>

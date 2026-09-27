@@ -114,7 +114,7 @@ export function makeSampleJob(state: Pick<AppState, 'materials' | 'hardware' | '
     revisions: [], productionChangePending: false,
     intakeText: 'היי, אני צריכה ארון לחדר שינה, 2.4 מטר רוחב, גובה עד התקרה בערך 2.6, ארבע דלתות, לבן, עם כמה מגירות. מצרפת תמונה של הקיר.',
     attachments: [], measurements: [], quote: defaultQuote(state.settings, [unit.id]),
-    events: [{ at: now, text: 'Job לדוגמה נוצר — אפשר למחוק' }],
+    events: [{ at: now, text: 'עבודה לדוגמה נוצרה, אפשר למחוק' }],
     createdAt: now, updatedAt: now,
   }
   job.revisions.push(makeSnapshot(job, state, 1, 'initial', 'גרסה ראשונה'))

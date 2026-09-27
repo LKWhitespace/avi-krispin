@@ -44,7 +44,7 @@ export function IntakeTab() {
       else if (draft.drawers > 0) u.bays.push({ id: uid(), content: 'drawers', count: draft.drawers })
     }
     u.notes = [draft.finish && `גימור: ${draft.finish}`, draft.notes].filter(Boolean).join(' · ') || undefined
-    update((j) => ({ ...j, units: [...j.units, u], quote: { ...j.quote, includedUnitIds: [...j.quote.includedUnitIds, u.id] } }), `יחידה נוצרה מ־Intake: ${u.name}`)
+    update((j) => ({ ...j, units: [...j.units, u], quote: { ...j.quote, includedUnitIds: [...j.quote.includedUnitIds, u.id] } }), `יחידה נוצרה מקליטה: ${u.name}`)
     nav('../units')
   }
 
@@ -56,7 +56,7 @@ export function IntakeTab() {
             <textarea rows={7} value={job.intakeText} onChange={(e) => setText(e.target.value)} placeholder="״אני צריך ארון 2.4 מטר, גובה 2.6, ארבע דלתות, לבן, שתי מגירות״" />
           </Field>
           <div className="row" style={{ marginTop: '.6rem' }}>
-            <label className="btn">{busy ? 'טוען…' : '+ תמונות / תוכנית'}<input type="file" accept="image/*" multiple hidden onChange={(e) => addFiles(e.target.files)} /></label>
+            <label className="btn">{busy ? 'טוען…' : '+ תמונות או תוכנית'}<input type="file" accept="image/*" multiple hidden onChange={(e) => addFiles(e.target.files)} /></label>
             <span className="faint">תמונות נשמרות מוקטנות בדפדפן.</span>
           </div>
           {job.attachments.length > 0 && (
@@ -70,27 +70,27 @@ export function IntakeTab() {
             </div>
           )}
         </Card>
-        <div className="callout info small">AI parsing של ההודעה — בגרסה מאוחרת. כרגע הנגר ממלא את הטופס ידנית מהטקסט. שדה שלא נאמר נשאר Missing, לא מקבל ברירת מחדל.</div>
+        <div className="callout info small">זיהוי אוטומטי של ההודעה יגיע בגרסה מאוחרת. כרגע ממלאים את הטופס ידנית מהטקסט. שדה שהלקוח לא ציין נשאר "חסר" ולא מקבל ברירת מחדל.</div>
       </div>
 
-      <Card title="Unit draft" right={<Badge tone="warn">מקור: לקוח</Badge>}>
+      <Card title="טיוטת יחידה" right={<Badge tone="warn">מקור המידות: הלקוח</Badge>}>
         <div className="stack">
           <div className="inline">
             <Field label="סוג"><select value={draft.template} onChange={(e) => setDraft({ ...draft, template: e.target.value as ParametricTemplate })}>{TEMPLATES.map((t) => <option key={t.t} value={t.t}>{t.label}</option>)}</select></Field>
             <Field label="שם"><input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="ארון חדר שינה" /></Field>
           </div>
           <div className="inline">
-            <Field label="רוחב" suffix="מ״מ"><NumInput value={draft.w} allowEmpty placeholder="Missing" onChange={(v) => setDraft({ ...draft, w: v })} /></Field>
-            <Field label="גובה" suffix="מ״מ"><NumInput value={draft.h} allowEmpty placeholder="Missing" onChange={(v) => setDraft({ ...draft, h: v })} /></Field>
-            <Field label="עומק" suffix="מ״מ"><NumInput value={draft.d} allowEmpty placeholder="Missing" onChange={(v) => setDraft({ ...draft, d: v })} /></Field>
+            <Field label="רוחב" suffix="מ״מ"><NumInput value={draft.w} allowEmpty placeholder="חסר" onChange={(v) => setDraft({ ...draft, w: v })} /></Field>
+            <Field label="גובה" suffix="מ״מ"><NumInput value={draft.h} allowEmpty placeholder="חסר" onChange={(v) => setDraft({ ...draft, h: v })} /></Field>
+            <Field label="עומק" suffix="מ״מ"><NumInput value={draft.d} allowEmpty placeholder="חסר" onChange={(v) => setDraft({ ...draft, d: v })} /></Field>
           </div>
           <div className="inline">
-            <Field label="דלתות"><NumInput value={draft.doors} allowEmpty placeholder="Missing" min={0} onChange={(v) => setDraft({ ...draft, doors: v })} /></Field>
-            <Field label="מגירות"><NumInput value={draft.drawers} allowEmpty placeholder="Missing" min={0} onChange={(v) => setDraft({ ...draft, drawers: v })} /></Field>
+            <Field label="דלתות"><NumInput value={draft.doors} allowEmpty placeholder="חסר" min={0} onChange={(v) => setDraft({ ...draft, doors: v })} /></Field>
+            <Field label="מגירות"><NumInput value={draft.drawers} allowEmpty placeholder="חסר" min={0} onChange={(v) => setDraft({ ...draft, drawers: v })} /></Field>
             <Field label="גימור / צבע"><input value={draft.finish} onChange={(e) => setDraft({ ...draft, finish: e.target.value })} placeholder="לבן" /></Field>
           </div>
           <Field label="הערות"><textarea rows={2} value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></Field>
-          {missing.length > 0 && <div className="callout warn small">Missing: {missing.join(', ')}. היחידה תיווצר, אבל לא תתומחר עד שהמידות יושלמו (ב־Units או ב־Measurements).</div>}
+          {missing.length > 0 && <div className="callout warn small">חסר: {missing.join(', ')}. היחידה תיווצר אבל לא תתומחר עד שהמידות יושלמו, ביחידות או במדידות.</div>}
           <div className="row" style={{ justifyContent: 'flex-end' }}>
             <button className="btn primary" onClick={createUnit}>צור יחידה מהטיוטה</button>
           </div>

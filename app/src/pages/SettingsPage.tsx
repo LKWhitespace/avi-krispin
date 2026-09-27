@@ -19,7 +19,7 @@ export function SettingsPage() {
 
   const download = () => {
     const blob = new Blob([exportState(state)], { type: 'application/json' })
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `quote-to-build-${new Date().toISOString().slice(0, 10)}.json`; a.click()
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `negaria-${new Date().toISOString().slice(0, 10)}.json`; a.click()
   }
   const importFile = async (f: File) => {
     try {
@@ -31,7 +31,7 @@ export function SettingsPage() {
 
   return (
     <div className="stack">
-      <div className="row between"><h1>Settings</h1>{!s.onboarded && <button className="btn primary" onClick={() => { set({ onboarded: true }); nav('/') }}>סיימתי — ל־Jobs</button>}</div>
+      <div className="page-head"><div><h1>הגדרות</h1><div className="lead">חמש דקות מכאן למחיר ראשון. חובה רק תעריף שעה ויעד רווחיות.</div></div>{!s.onboarded && <button className="btn primary" onClick={() => { set({ onboarded: true }); nav('/') }}>סיימתי, לעבודות</button>}</div>
       <div className="grid two">
         <Card title="1 · הנגרייה">
           <div className="stack">
@@ -39,7 +39,7 @@ export function SettingsPage() {
             <div className="inline">
               <Field label="תעריף שעת נגרייה" suffix="₪"><NumInput value={s.laborRate} min={0} onChange={(v) => set({ laborRate: v ?? 0 })} /></Field>
               <Field label="תעריף שעת התקנה" suffix="₪"><NumInput value={s.installRate} min={0} onChange={(v) => set({ installRate: v ?? 0 })} /></Field>
-              <Field label="Margin יעד" suffix="%"><PctInput value={s.targetMargin} onChange={(v) => set({ targetMargin: Math.min(0.95, v) })} /></Field>
+              <Field label="יעד רווחיות" suffix="%"><PctInput value={s.targetMargin} onChange={(v) => set({ targetMargin: Math.min(0.95, v) })} /></Field>
             </div>
             <div className="inline">
               <Field label="הוצאות קבועות לחודש" suffix="₪ (0 = לא מוגדר)"><NumInput value={s.overheadPerMonth} min={0} onChange={(v) => set({ overheadPerMonth: v ?? 0 })} /></Field>
@@ -47,7 +47,7 @@ export function SettingsPage() {
               <Field label="מע״מ" suffix="%"><PctInput value={s.vat} onChange={(v) => set({ vat: v })} /></Field>
               <Field label="סיכון ברירת מחדל" suffix="%"><PctInput value={s.risk} onChange={(v) => set({ risk: v })} /></Field>
             </div>
-            <p className="faint">Overhead מחולק לשעות: ₪{s.overheadPerMonth > 0 ? Math.round(s.overheadPerMonth / s.hoursPerMonth) : 0} לכל שעת עבודה/התקנה.</p>
+            <p className="faint">ההוצאות הקבועות מתחלקות לשעות: ₪{s.overheadPerMonth > 0 ? Math.round(s.overheadPerMonth / s.hoursPerMonth) : 0} לכל שעת עבודה או התקנה.</p>
           </div>
         </Card>
 
@@ -61,7 +61,7 @@ export function SettingsPage() {
             <Field label="למ״ר חיפוי"><NumInput value={s.labor.perM2} min={0} onChange={(v) => setLabor({ perM2: v ?? 0 })} /></Field>
             <Field label="קנט — ₪ למטר"><NumInput value={s.edgeCostPerMeter} min={0} step={0.1} onChange={(v) => set({ edgeCostPerMeter: v ?? 0 })} /></Field>
           </div>
-          <p className="faint">אלה ברירות מחדל לתמחור. ° יש לכייל מול 2–3 עבודות אמיתיות לפני שסומכים על השעות.</p>
+          <p className="faint">אלה ברירות מחדל לתמחור. כדאי לכייל אותן מול שתיים או שלוש עבודות אמיתיות לפני שסומכים על השעות.</p>
         </Card>
 
         <Card title="3 · ברירות מחדל ליחידה חדשה">
@@ -77,7 +77,7 @@ export function SettingsPage() {
           </div>
         </Card>
 
-        <Card title="4 · הצעת מחיר — מיתוג וברירות מחדל">
+        <Card title="4 · הצעת מחיר, מיתוג וברירות מחדל">
           <div className="stack">
             <div className="inline">
               <Field label="טלפון"><input value={s.quote.phone} onChange={(e) => setQ({ phone: e.target.value })} /></Field>
@@ -99,13 +99,13 @@ export function SettingsPage() {
           </div>
         </Card>
 
-        <Card title="נתונים">
+        <Card title="גיבוי">
           <p className="muted small">הכול נשמר בדפדפן הזה בלבד. ייצא קובץ לגיבוי או להעברה למחשב אחר.</p>
           <div className="row">
-            <button className="btn" onClick={download}>ייצוא JSON</button>
-            <button className="btn" onClick={() => fileRef.current?.click()}>ייבוא JSON</button>
+            <button className="btn" onClick={download}>ייצוא לקובץ</button>
+            <button className="btn" onClick={() => fileRef.current?.click()}>ייבוא מקובץ</button>
             <input ref={fileRef} type="file" accept="application/json" hidden onChange={(e) => e.target.files?.[0] && importFile(e.target.files[0])} />
-            <button className="btn danger ghost" onClick={() => confirm('לאפס את כל הנתונים ל־presets? אין שחזור.') && dispatch({ type: 'state/reset' })}>איפוס</button>
+            <button className="btn danger ghost" onClick={() => confirm('לאפס את כל הנתונים לברירות המחדל? אין שחזור.') && dispatch({ type: 'state/reset' })}>איפוס</button>
           </div>
         </Card>
       </div>

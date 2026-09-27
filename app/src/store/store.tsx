@@ -65,7 +65,7 @@ export function reducer(s: AppState, a: Action): AppState {
           const isProd = j.status === 'locked' && j.productionChangePending
           const rev = makeSnapshot(j, s, version, isProd ? 'production_change' : a.trigger, a.note, isProd)
           return touch({ ...j, revisions: [...j.revisions, rev], productionChangePending: false, status: j.status === 'draft' ? 'quoted' : j.status },
-            isProd ? `Production Revision V${version} נוצרה` : `גרסה V${version} נשמרה`)
+            isProd ? `גרסת ייצור ${version} נוצרה` : `גרסה ${version} נשמרה`)
         }),
       }
     case 'job/restore':
@@ -75,7 +75,7 @@ export function reducer(s: AppState, a: Action): AppState {
           if (j.id !== a.id) return j
           const r = j.revisions.find((x) => x.id === a.revisionId)
           if (!r) return j
-          return touch({ ...j, units: structuredClone(r.units), extras: structuredClone(r.extras), quotedPrice: r.quotedPrice }, `שוחזר מ־V${r.version} (לא נשמר עדיין כגרסה)`)
+          return touch({ ...j, units: structuredClone(r.units), extras: structuredClone(r.extras), quotedPrice: r.quotedPrice }, `שוחזר מגרסה ${r.version} (עדיין לא נשמר כגרסה)`)
         }),
       }
     case 'job/status':
@@ -87,12 +87,12 @@ export function reducer(s: AppState, a: Action): AppState {
           if (j.id !== a.id) return j
           const last = j.revisions.at(-1)
           const version = (last?.version ?? 0) + 1
-          const rev = makeSnapshot(j, s, version, 'manual', 'Production Revision', true)
-          return touch({ ...j, status: 'locked', revisions: [...j.revisions, rev], productionChangePending: false }, `Job ננעל לייצור — Production Revision V${version}`)
+          const rev = makeSnapshot(j, s, version, 'manual', 'גרסת ייצור', true)
+          return touch({ ...j, status: 'locked', revisions: [...j.revisions, rev], productionChangePending: false }, `העבודה ננעלה לייצור, גרסת ייצור ${version}`)
         }),
       }
     case 'job/openProductionChange':
-      return { ...s, jobs: s.jobs.map((j) => (j.id === a.id ? touch({ ...j, productionChangePending: true }, 'Job נפתח לשינוי אחרי נעילה') : j)) }
+      return { ...s, jobs: s.jobs.map((j) => (j.id === a.id ? touch({ ...j, productionChangePending: true }, 'העבודה נפתחה לשינוי אחרי נעילה') : j)) }
     case 'job/sendQuote':
       return {
         ...s,
@@ -102,7 +102,7 @@ export function reducer(s: AppState, a: Action): AppState {
           const same = last && JSON.stringify([last.units, last.extras, last.quotedPrice]) === JSON.stringify([j.units, j.extras, j.quotedPrice])
           const rev = same ? last : makeSnapshot(j, s, (last?.version ?? 0) + 1, 'manual', 'הצעה נשלחה')
           const revisions = same ? j.revisions : [...j.revisions, rev]
-          return touch({ ...j, revisions, status: j.status === 'draft' ? 'quoted' : j.status, quote: { ...j.quote, sentAt: now(), sentRevisionId: rev.id, viewedAt: undefined } }, `הצעה V${rev.version} נשלחה ללקוח`)
+          return touch({ ...j, revisions, status: j.status === 'draft' ? 'quoted' : j.status, quote: { ...j.quote, sentAt: now(), sentRevisionId: rev.id, viewedAt: undefined } }, `הצעה, גרסה ${rev.version}, נשלחה ללקוח`)
         }),
       }
     case 'job/portalViewed':
@@ -114,7 +114,7 @@ export function reducer(s: AppState, a: Action): AppState {
           if (j.id !== a.id) return j
           const opt = j.quote.options.find((o) => o.id === a.optionId)
           const units = opt ? j.units.map((u) => (u.kind === 'parametric' ? { ...u, doorMaterialId: opt.doorMaterialId ?? u.doorMaterialId, carcassMaterialId: opt.carcassMaterialId ?? u.carcassMaterialId } : u)) : j.units
-          return touch({ ...j, units, status: 'approved', quote: { ...j.quote, approvedAt: now(), approvedOptionId: a.optionId } }, opt ? `הלקוח אישר את ההצעה — אופציה "${opt.name}"` : 'הלקוח אישר את ההצעה')
+          return touch({ ...j, units, status: 'approved', quote: { ...j.quote, approvedAt: now(), approvedOptionId: a.optionId } }, opt ? `הלקוח אישר את ההצעה, ${opt.name}` : 'הלקוח אישר את ההצעה')
         }),
       }
     case 'job/changeRequest':
@@ -180,7 +180,7 @@ export function newJob(number: number, customer: Job['customer'], projectType: J
     extras: { installationHours: 0, installationFlat: 0, transport: 0, subcontractors: [], risk: null },
     quotedPrice: null, revisions: [], productionChangePending: false,
     intakeText: '', attachments: [], measurements: [], quote: defaultQuote(settings),
-    events: [{ at: t, text: 'Job נוצר' }], createdAt: t, updatedAt: t,
+    events: [{ at: t, text: 'העבודה נוצרה' }], createdAt: t, updatedAt: t,
   }
 }
 
